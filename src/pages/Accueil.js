@@ -1,14 +1,19 @@
+import styled from "styled-components";
+import Universites from "../components/Universites";
+
+const AccueilContainer = styled.div`
+  margin-top: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+`;
 
 function Accueil() {
   return (
-    <div >
-      <header >
-        <p>
-          test accueil
-        </p>
-        
-      </header>
-    </div>
+    <AccueilContainer>
+        <Universites />
+    </AccueilContainer>
   );
 }
 
