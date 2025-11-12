@@ -41,6 +41,7 @@ const ContainerScoreCriteria = styled.div`
   flex-wrap: wrap;       /* permet le retour à la ligne */
   gap: 12px;             /* espace entre les éléments */
   justify-content: space-between;
+  margin-bottom: 10px;
 `;
 
 
@@ -52,6 +53,8 @@ const ScoreCriteria = styled.div`
   width: calc(50% - 8px); /* 2 éléments par ligne */
   border-bottom: 1px solid black;
   box-sizing: border-box;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
 
   p:nth-of-type(2) {
     font-weight: bold;
@@ -79,12 +82,27 @@ const ScoreCriteria = styled.div`
 
 const ContainerScoreCriteriaComment = styled.div`
     margin-top: 20px;
+    .comment{
+        margin-bottom: 24px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: box-shadow 0.2s ease;
+
+        &:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+    }
 `;
 
 
 function Comment({review}) {
     const nomComplet = "Bamba alpha"
     const nom =  nomComplet.slice(0,1).toUpperCase();
+
+    console.log(review)
 
     return (
         <CommentContainer>
@@ -99,9 +117,7 @@ function Comment({review}) {
                 </div>
              </HeaderComment>
              <ContainerScoreCriteriaComment>
-            
-                   
-                         <p>{review.comment}</p>
+                         <p className="comment">{review.comment}</p>
                          <ContainerScoreCriteria>
                             {
                                 review.scores.map((score) => (
@@ -112,8 +128,6 @@ function Comment({review}) {
                                 ))
                             }
                          </ContainerScoreCriteria>                     
-                   
-                
              </ContainerScoreCriteriaComment>            
         </CommentContainer>
     );

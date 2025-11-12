@@ -49,6 +49,7 @@ export function calculateSchoolRating(school) {
   const reviewRatings = [];
   const categoryScores = {};
 
+  console.log(school.reviews);
   // Calculer la note de chaque review
   school.reviews.forEach(review => {
     const reviewRating = calculateSingleReviewRating(review);
@@ -104,8 +105,8 @@ export function convertToFiveStarRating(rating) {
  * Affichage formaté: "4.2/5 ★★★★☆ (12 avis)"
  */
 export function formatRatingDisplay(school) {
+
   const rating = calculateSchoolRating(school);
-  
   if (rating.totalReviews === 0) {
     return "Aucun avis";
   }
@@ -114,7 +115,7 @@ export function formatRatingDisplay(school) {
   const fullStars = Math.floor(rating.stars);
   const hasHalfStar = rating.stars % 1 !== 0;
   const emptyStars = 4 - Math.ceil(rating.stars);
-  
+
   const stars = "★".repeat(fullStars) + 
                 (hasHalfStar ? "☆" : "") + 
                 "☆".repeat(emptyStars);

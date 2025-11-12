@@ -4,7 +4,6 @@ import building from "../assets/building.svg";
 import openBook from "../assets/open-book.svg";
 import wallet from "../assets/wallet.svg";
 import { calculateAllCriteria } from "../utils/criteria/criteriaCalculator";
-import datas from "../utils/datas";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useState } from "react";
@@ -14,13 +13,16 @@ import { formatRatingDisplay } from "../utils/rating/rating";
 import ToggleComment from "../components/toggleComment";
 import Comment from "../components/comments";
 import Modal from "../components/ModalAvis";
+import { base_url_local } from "../utils/api";
+import { useFetch } from "../utils/hooks";
+import { Loader } from "../utils/styles/Atom";
 
 
 // 🧩 Conteneur principal
 const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 150px auto 0px auto;
+  margin: 120px auto 0px auto;
   align-items: center;
 
   gap: 20px;
@@ -42,7 +44,7 @@ const ImageGallery = styled.div`
 `;
 
 const StyledTitle = styled.div`
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px dashed #000000;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -53,29 +55,24 @@ const StyledTitle = styled.div`
   padding: 30px 20px;
   align-items: center;
 
-  @media (max-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 10px;
-    .nameNote {
-      width: 50%;
+  .nameNote {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    div {
+      margin-left: 20px;
       h2 {
+        font-weight: bold;
         font-size: 1rem;
       }
-        p {
-          font-size: 1rem;
-        }
     }
-    button {
-      font-size: 0.5rem;
-      padding: 0 10px;
-    }
+    
   }
 
-  button {
+   button {
       border: 0;
       line-height: 2.5;
-      padding: 0 20px;
+      padding: 0 10px;
       font-size: 1rem;
       text-align: center;
       color: white;
@@ -93,18 +90,36 @@ const StyledTitle = styled.div`
         inset -2px -2px 3px rgb(0 0 0 / 0.6);
       }
 
-      :hover {
+      button:hover {
         background-color: red;
       }
 
-      :active {
+      button:active {
         box-shadow:
           inset -2px -2px 3px rgb(255 255 255 / 0.6),
           inset 2px 2px 3px rgb(0 0 0 / 0.6);
       }
-
+    }
+      @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    .nameNote {
+      width: 50%;      
+      h2 {
+        font-size: 1rem;
+      }
+        p {
+          font-size: 1rem;
+        }
+    }
+    button {
+      font-size: 0.5rem;
+      padding: 0 10px;
+    }
   }
-}  `;
+
+}`;
 
 const ContentImages = styled.div`
   width: 100%;
@@ -203,24 +218,31 @@ const CommentContainer = styled.div`
 function Details() {
   const { id } = useParams();
   console.log("ID de l'école :", id);
+  
   const [currentIndex, setCurrentIndex] = useState(0);
    // 🎛️ STATE : est-ce que la modal est ouverte ?
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const school = datas?.find((s) => s.id === parseInt(id));
+  const {datas, isLoading, error} = useFetch(base_url_local+'school/detail-university/'+id);
 
-  if (!school) {
+    console.log("DATTAS de l'école :", datas);
+
+  if (!datas) {
     return <div style={{marginTop: "200px", textAlign: "center"}}>École non trouvée</div>;
   }
 
-  const {reviews} = school || [];
+  if (error) {
+    return <span>Oups il y a eu un problème</span>;
+  }
+
+  const {reviews} = datas || [];
 
 
   // ⚙️ Exemple d’images
   const images = [cover,cover2,cover ];
 
   const { coursTheoriques, coursPratiques, cadreEtudiant, fraisScolaire } =
-    calculateAllCriteria(school);
+    calculateAllCriteria(datas);
     console.log('Critères calculés :', { coursPratiques , coursTheoriques, cadreEtudiant, fraisScolaire });
 
   // 🎠 Slider mobile state
@@ -265,8 +287,11 @@ function Details() {
       <ContentImages>
         <StyledTitle>
           <div className="nameNote"> 
-            <h2>{school.name}</h2>
-            <p> {formatRatingDisplay(school)} </p>
+            <img src={datas.logo} className="h-16 w-16" alt="logo" /> 
+            <div>
+              <h2>{datas.name}</h2>
+              <p> {formatRatingDisplay(datas)} </p>
+            </div>
           </div>
             <button type="button" onClick={handleOpenModal}>
               Ajouter un avis
@@ -288,28 +313,33 @@ function Details() {
         <SliderArrow onClick={nextImage}>→</SliderArrow>
       </MobileSlider>
 
-      { reviews.length > 0 &&
-        <BodyDetail>
-          {/* 📊 Synthèse des notes */}
-          <NoteContainer>
-            <Synthese logo={openBook} note={coursTheoriques.outOfFive } label="Cours théoriques" />
-            <Synthese logo={building} note={coursPratiques.outOfFive} label="Cours pratiques" />
-            <Synthese logo={users} note={cadreEtudiant.outOfFive} label="Cadre étudiant" />
-            <Synthese logo={wallet} note={fraisScolaire.outOfFive} label="Frais scolaire" />
-          </NoteContainer>
+      { 
+        isLoading ? (
+          <Loader />
+        ) : (
+              reviews.length > 0 &&
+                <BodyDetail>
+                  {/* 📊 Synthèse des notes */}
+                  <NoteContainer>
+                    <Synthese logo={openBook} note={coursTheoriques.outOfFive } label="Cours théoriques" />
+                    <Synthese logo={building} note={coursPratiques.outOfFive} label="Cours pratiques" />
+                    <Synthese logo={users} note={cadreEtudiant.outOfFive} label="Cadre étudiant" />
+                    <Synthese logo={wallet} note={fraisScolaire.outOfFive} label="Frais scolaire" />
+                  </NoteContainer>
 
-          <ToggleComment/>
+                  <ToggleComment/>
 
-          <CommentContainer>
-            <div>
-              { 
-                reviews.map((review) => (
-                  <Comment review={review} />
-                ))
-              }
-            </div>
-          </CommentContainer>
-        </BodyDetail>
+                  <CommentContainer>
+                    <div>
+                      { 
+                        reviews.map((review) => (
+                          <Comment review={review} />
+                        ))
+                      }
+                    </div>
+                  </CommentContainer>
+                </BodyDetail>
+              )
       }
 
       <Modal

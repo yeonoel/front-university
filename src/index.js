@@ -3,23 +3,26 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route, } from 'react-router-dom';
 import Accueil from './pages/Accueil';
 import GlobalStyle from './utils/styles/GlobalStyle';
-import ThemeProvider from './utils/context';
-import Footer from './components/Footer';
+import {AuthProvider, ThemeProvider} from './utils/context';
 import Details from './pages/Details';
-import Header from './components/Header';
 import './index.css';
+import Inscription from './pages/inscription';
+import MainLayout from './Layout/mainLayout';
+import Connexion from './pages/connexion';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
    <Router>
     <ThemeProvider>
-      <GlobalStyle />
-      <Header />
-      <Routes>
-        <Route path="/" element={<Accueil />} />
-        <Route path="/universite/:id" element={<Details />} />
-      </Routes>
-      <Footer />
+      <AuthProvider>
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<MainLayout> <Accueil /> </MainLayout>} />
+          <Route path="/universite/:id" element={<MainLayout><Details /></MainLayout>} />
+          <Route path="/inscription" element={<Inscription />} />
+          <Route path="/connexion" element={<Connexion />} />
+        </Routes>
+        </AuthProvider>
     </ThemeProvider>
   </Router>
 );
