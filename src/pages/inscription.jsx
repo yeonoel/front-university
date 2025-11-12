@@ -33,24 +33,21 @@ export default function Inscription() {
         setError('');
 
         try {
-            console.log("📋 Données reçues :", formData);
             const data = await mutate(base_url_local + "auth/signup", {body: formData});
-            console.log("📋 dataaaas :", data);
-            if (data.success === "success") {
+            if (data.status === "success") {
                 setMessage('Inscription réussie ! 🎉');
                 setFormData({ username: '', email: '', password: '' });
                 login(data.token, data.user);
+                setError(data.message || 'Erreur lors de l\'inscription');
                 navigate('/Connexion');
             } else {
-                setError(data.message || 'Erreur lors de la connexion');
+                setError(data.message || 'Erreur lors de l\'inscription');
             }
         } catch (err) {
             setError(err.message);
-            console.error('Erreur:', err);
         } finally {
             setLoading(false);
-        }   
-            
+        } 
     };
 
     return (

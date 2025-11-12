@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import logo from "../../assets/logo.png";
-import Connexion from "../ModalConnexion";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/hooks";
@@ -184,12 +183,13 @@ const Filters = styled.div`
 `;
 
 function Nav() {
-  const [isOpen, setIsOpen] = useState(false);
   const [opendropdownUser, setOpenDropdownUser] = useState(false);
   const navigate = useNavigate();
   const handleHomePage = () => navigate("/");
   const { isAuthenticated } = useAuth();
   const avatarRef = useRef(null);
+
+  const handleConnexionPage = () => navigate("/connexion");
 
   const handleDropdownUser = (e) => {
     e.stopPropagation();
@@ -201,10 +201,6 @@ function Nav() {
       if (avatarRef.current && !avatarRef.current.contains(event.target)) {
         setOpenDropdownUser(false);
       }
-    };
-
-    if (opendropdownUser) {
-      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
@@ -236,9 +232,9 @@ function Nav() {
         ) : (
           <ConnexionButton 
             className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 shadow-lg hover:shadow-xl" 
-            onClick={() => setIsOpen(true)}
+            onClick={handleConnexionPage}
           >
-            Inscription
+            Se connecter
           </ConnexionButton>
         )}
       </TopRow>
@@ -258,8 +254,6 @@ function Nav() {
           <option value="semi-public">Semi-publique</option>
         </select>
       </Filters>
-
-      <Connexion isOpen={isOpen} setIsOpen={setIsOpen} />
 
       <DropdownUser
         opendropdownUser={opendropdownUser}

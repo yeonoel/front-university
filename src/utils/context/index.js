@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         const storedUser = localStorage.getItem('user');
-        if(storedToken && storedToken) {
+        if(storedToken && storedUser) {
             setToken(storedToken);
             setUser(JSON.parse(storedUser));
             setIsAuthenticated(true);
@@ -50,6 +50,7 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(false);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        console.log('logout');
     };
 
     return (

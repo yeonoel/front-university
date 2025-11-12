@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useAuth } from "../../utils/hooks";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DropdownOverlay = styled.div`
     position: fixed;
@@ -76,11 +77,9 @@ const DropdownItem = styled.li`
 `;
 
 function DropdownUser({opendropdownUser, setOpenDropdownUser}) {
-    const { isAuthenticated } = useAuth();
-    const userConnected = isAuthenticated ? localStorage.getItem('user') : null;
-    const username = userConnected ? JSON.parse(userConnected).username : null;
-    const {logout} = useAuth();
+    const {user, logout } = useAuth();
     const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -98,14 +97,17 @@ function DropdownUser({opendropdownUser, setOpenDropdownUser}) {
         };
     }, [opendropdownUser, setOpenDropdownUser]);
 
-    const disconnect = () => {
+    const handleDisconnect = () => {
         logout();
         setOpenDropdownUser(false);
+        navigate('/');
     };
 
     if(!opendropdownUser) {
         return null;
     }
+
+    const username = user ? user.username : '';
 
     return (
         <>
@@ -114,7 +116,7 @@ function DropdownUser({opendropdownUser, setOpenDropdownUser}) {
                 <DropdownList>
                     <DropdownItem>{username}</DropdownItem>
                     <DropdownItem>Ajouter un avis</DropdownItem>
-                    <DropdownItem onClick={disconnect}>Se déconnecter</DropdownItem>
+                    <DropdownItem onClick={handleDisconnect}>Se déconnecter</DropdownItem>
                 </DropdownList>
             </DropdownContainer>
         </>

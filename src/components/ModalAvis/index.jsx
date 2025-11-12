@@ -40,8 +40,8 @@ const ModalContent = styled.div`
 // ✨ Le bouton X pour fermer
 const CloseButton = styled.button`
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 35px;
+  right: 35px;
   background: transparent;
   border: none;
   font-size: 28px;
@@ -96,7 +96,15 @@ function Modal({ isOpen, onClose, onSubmit }) {
   
   // Vérifier que tous les scores sont remplis ET que le commentaire >= 50 caractères
   const allScoresFilled = Object.values(formData.scores).every(score => score !== "");
-  const canSubmit = formData.comment.length >= 50 && allScoresFilled;
+  let canSubmit = false;
+    if((formData.comment.length === 0 && allScoresFilled) || (formData.comment.length >= 20 && allScoresFilled)) {
+      canSubmit = true;
+    }
+    else if (formData.comment.length >= 0 && formData.comment.length <= 20 && allScoresFilled) {
+      canSubmit = false;
+    }
+  
+  
 
   // Gérer la soumission
   const handleSubmit = () => {
@@ -135,12 +143,12 @@ function Modal({ isOpen, onClose, onSubmit }) {
                 <span className="text-2xl">⭐</span>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Note ton expérience</h2>
-                <p className="text-sm text-gray-600">Évalue chaque aspect honnêtement</p>
+                <h2 className="text-[1rem] font-bold text-gray-900">Note ton expérience</h2>
+                <p className="text-[0.8rem] text-gray-600">Évalue chaque aspect honnêtement</p>
               </div>
             </div>
             
-            <div className="space-y-6">
+            <div className="h-70">
               {Object.keys(formData.scores).map((criteria, idx) => {
                 const icons = [BookOpen, Building, Users, Wallet];
                 const colors = ['text-blue-600', 'text-green-600', 'text-purple-600', 'text-orange-600'];
@@ -150,9 +158,9 @@ function Modal({ isOpen, onClose, onSubmit }) {
                 return (
                   <div key={criteria} className="border-b border-gray-100 pb-5 last:border-0">
                     <div className="flex items-center gap-2 mb-3">
-                      <Icon size={22} className={color} />
-                      <label className="font-semibold text-gray-900">{criteria}</label>
-                      <span className="text-red-500 text-sm">*</span>
+                      <Icon size={18} className={color} />
+                      <label className=" text-[0.8rem] font-semibold text-gray-900">{criteria}</label>
+                      <span className="text-red-500 text-sm ">*</span>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {scoreOptions.map(option => (
@@ -163,11 +171,11 @@ function Modal({ isOpen, onClose, onSubmit }) {
                             ...formData,
                             scores: { ...formData.scores, [criteria]: option }
                           })}
-                          className={`px-4 py-3 rounded-xl border-2 transition-all font-medium text-sm ${
+                          className={`px-4 h-15 rounded-xl border-2 transition-all font-medium text-[0.7rem] ${
                             getScoreColor(option, formData.scores[criteria] === option)
                           }`}
                         >
-                          <div className="text-xl mb-1">{getScoreEmoji(option)}</div>
+                          <div className="text-[1rem]  mb-1">{getScoreEmoji(option)}</div>
                           {option}
                         </button>
                       ))}
@@ -182,28 +190,18 @@ function Modal({ isOpen, onClose, onSubmit }) {
         {/* Section 2 : Commentaire */}
         <Section>
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">✍️</span>
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">Commentaire</h2>
-                <p className="text-sm text-gray-600">Donne des détails utiles aux futurs étudiants</p>
-              </div>
-            </div>
-
             <div className="mb-6">
               
               <textarea
                 value={formData.comment}
                 onChange={(e) => setFormData({...formData, comment: e.target.value})}
                 rows="6"
-                placeholder="Parle des profs, du matériel, de l'ambiance, des stages, des débouchés... Sois honnête et constructif !"
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none text-gray-900"
+                placeholder="✍️ Commenter, Donne des détails utiles aux futurs étudiantsParle des profs, du matériel, de l'ambiance, des stages, des débouchés... Sois honnête et constructif !"
+                className="w-full px-4 h-20 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none text-gray-900"
               ></textarea>
               <div className="flex items-center justify-between mt-2">
                 <p className="text-sm text-gray-500">
-                  {formData.comment.length} / 50 caractères minimum
+                  {formData.comment.length} / 20 caractères minimum
                 </p>
                 {formData.comment.length >= 50 && (
                   <span className="text-sm text-green-600 font-medium flex items-center gap-1">
@@ -213,7 +211,6 @@ function Modal({ isOpen, onClose, onSubmit }) {
                 )}
               </div>
             </div>
-
           </div>
         </Section>
 
@@ -235,7 +232,7 @@ function Modal({ isOpen, onClose, onSubmit }) {
             </button>
           </div>
           
-          {!allScoresFilled && formData.comment.length >= 50 && (
+          {!allScoresFilled && formData.comment.length >= 20 && (
             <p className="text-sm text-orange-600 mt-2 text-center">
               ⚠️ Veuillez remplir toutes les notes avant de publier
             </p>

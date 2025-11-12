@@ -30,9 +30,7 @@ function Connexion() {
         setError('');
 
         try {
-            console.log("📋 Données reçues :", formData);
             const data = await mutate(base_url_local + "auth/signin", {body: formData});
-            console.log("📋 dataaaas :", data);
            
             if (data.status === "success") {
                 setMessage('Inscription réussie ! 🎉');
@@ -43,8 +41,7 @@ function Connexion() {
                 setError(data.message || 'Erreur lors de la connexion');
             }
         } catch (err) {
-            setError('Erreur de connexion au serveur');
-            console.error('Erreur:', err);
+            setError('Email ou mot de passe incorrect');
         } finally {
             setLoading(false);
         }
@@ -76,7 +73,7 @@ function Connexion() {
                                 onChange={handleChange}
                                 required
                                 className="w-full px-4 py-2 bg-gray-50 border border-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                                placeholder="votre_nom"
+                                placeholder="Email ou username"
                             />
                         </div>
 
