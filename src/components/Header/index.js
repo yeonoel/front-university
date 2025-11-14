@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/hooks";
 import avatar_user_connected from "../../assets/avatar_user_connected.jpg";
 import DropdownUser from "../openDropDownUser";
+import Filtre from "../Filtre";
 
 const StyledHeader = styled.header`
   box-sizing: border-box;
@@ -65,45 +66,7 @@ const StyledLogo = styled.img`
   }
 `;
 
-const SearchBar = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 1;
-  max-width: 500px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
-  input[type="text"] {
-    flex: 1;
-    border: none;
-    padding: 10px 15px;
-    outline: none;
-    font-size: 16px;
-  }
-
-  input[type="button"] {
-    background-color: #b4b5b6ff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s ease;
-
-    &:hover {
-      background-color: #4889d0ff;
-    }
-  }
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-    width: 100%;
-    order: -1;
-  }
-`;
 
 const ConnexionButton = styled.button`
   border: none;
@@ -147,40 +110,7 @@ const UserAvatar = styled.img`
   }
 `;
 
-const Filters = styled.div`
-  display: flex;
-  gap: 15px;
-  justify-content: center;
 
-  select {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: white;
-    font-size: 15px;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
-
-    &:hover {
-      border-color: #4889d0ff;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: #4889d0ff;
-    }
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-
-    select {
-      width: 100%;
-    }
-  }
-`;
 
 function Nav() {
   const [opendropdownUser, setOpenDropdownUser] = useState(false);
@@ -216,10 +146,7 @@ function Nav() {
           EcoleInfo CI
         </StyledSpan>
 
-        <SearchBar>
-          <input type="text" placeholder="Rechercher une école..." />
-          <input type="button" value="🔍" />
-        </SearchBar>
+        <Filtre />
 
         {isAuthenticated ? (
           <UserAvatarContainer ref={avatarRef}>
@@ -238,22 +165,6 @@ function Nav() {
           </ConnexionButton>
         )}
       </TopRow>
-
-      <Filters>
-        <select>
-          <option value="">-- Niveau du prix --</option>
-          <option value="abordable">Abordable</option>
-          <option value="moyenne">Moyenne</option>
-          <option value="trop-chere">Trop chère</option>
-        </select>
-
-        <select>
-          <option value="">-- Type d'école --</option>
-          <option value="public">Public</option>
-          <option value="privee">Privée</option>
-          <option value="semi-public">Semi-publique</option>
-        </select>
-      </Filters>
 
       <DropdownUser
         opendropdownUser={opendropdownUser}

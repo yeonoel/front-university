@@ -46,7 +46,8 @@ export function useMutation() {
     const mutate = async (url, options) => {
         setIsLoading(true);
         setError(null);
-        
+                    console.log("eeeeeeeeee",options);
+
         try {
             const response = await fetch(url, {
                 method: options.method || 'POST',
@@ -58,6 +59,7 @@ export function useMutation() {
             });
 
             const data = await response.json();
+            console.log("dssdsdsdddsdsdds",data);
             
             if (!response.ok) {
                 throw new Error(data.message || 'Erreur');

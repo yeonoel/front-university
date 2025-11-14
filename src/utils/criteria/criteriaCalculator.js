@@ -32,8 +32,8 @@ function calculateCriteriaAverage(school, criteriaLabel) {
   let count = 0;
 
   school.reviews.forEach(review => {
-    if (review.scores) {
-      review.scores.forEach(score => {
+    if (review.reviewScores) {
+      review.reviewScores.forEach(score => {
         if (score.criteria && score.criteria.label === criteriaLabel) {
           const numericValue = SCORE_MAPPING[score.value] || 0;
           totalScore += numericValue;

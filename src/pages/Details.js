@@ -22,7 +22,7 @@ import { Loader } from "../utils/styles/Atom";
 const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 120px auto 0px auto;
+  margin: 90px auto 0px auto;
   align-items: center;
 
   gap: 20px;

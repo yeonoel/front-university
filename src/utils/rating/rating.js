@@ -14,19 +14,19 @@ const SCORE_MAPPING = {
 
 /**
  * Calcule la note moyenne d'UNE review (toujours 4 catégories)
- * @param {Object} review - Une review avec 4 scores
+ * @param {Object} review - Une review avec 4 reviewScores
  * @returns {number} Note moyenne de cette review sur 4
  */
 export function calculateSingleReviewRating(review) {
-  if (!review.scores || review.scores.length === 0) {
+  if (!review.reviewScores || review.reviewScores.length === 0) {
     return 0;
   }
 
-  const totalScore = review.scores.reduce((sum, score) => {
+  const totalScore = review.reviewScores.reduce((sum, score) => {
     return sum + (SCORE_MAPPING[score.value] || 0);
   }, 0);
 
-  return totalScore / review.scores.length; // Toujours /4 normalement
+  return totalScore / review.reviewScores.length; // Toujours /4 normalement
 }
 
 /**
@@ -47,7 +47,7 @@ export function calculateSchoolRating(school) {
   }
 
   const reviewRatings = [];
-  const categoryScores = {};
+  const categoryreviewScores = {};
 
   console.log(school.reviews);
   // Calculer la note de chaque review
@@ -61,15 +61,15 @@ export function calculateSchoolRating(school) {
     });
 
     // Calcul par catégorie
-    review.scores.forEach(score => {
+    review.reviewScores.forEach(score => {
       const numericValue = SCORE_MAPPING[score.value] || 0;
       const categoryLabel = score.criteria.label;
       
-      if (!categoryScores[categoryLabel]) {
-        categoryScores[categoryLabel] = { sum: 0, count: 0 };
+      if (!categoryreviewScores[categoryLabel]) {
+        categoryreviewScores[categoryLabel] = { sum: 0, count: 0 };
       }
-      categoryScores[categoryLabel].sum += numericValue;
-      categoryScores[categoryLabel].count++;
+      categoryreviewScores[categoryLabel].sum += numericValue;
+      categoryreviewScores[categoryLabel].count++;
     });
   });
 
@@ -79,8 +79,8 @@ export function calculateSchoolRating(school) {
 
   // Moyennes par catégorie
   const ratingsByCategory = {};
-  Object.keys(categoryScores).forEach(category => {
-    const avg = categoryScores[category].sum / categoryScores[category].count;
+  Object.keys(categoryreviewScores).forEach(category => {
+    const avg = categoryreviewScores[category].sum / categoryreviewScores[category].count;
     ratingsByCategory[category] = parseFloat(avg.toFixed(2));
   });
 

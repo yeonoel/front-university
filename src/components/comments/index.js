@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { colorBackground, colorText } from "../../utils/styles/colors";
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 const CommentContainer = styled.div`
     background-color: white;
@@ -33,7 +35,9 @@ const HeaderComment = styled.div`
     child:nth-child(2){
         magin-left: 20px;
     }
-        line-height: 10px;
+        line-height: 20px;
+        font-size: 14px;
+        
 `;
 
 const ContainerScoreCriteria = styled.div`
@@ -55,6 +59,8 @@ const ScoreCriteria = styled.div`
   box-sizing: border-box;
   margin-bottom: 10px;
   padding-bottom: 10px;
+
+  
 
   p:nth-of-type(2) {
     font-weight: bold;
@@ -83,6 +89,8 @@ const ScoreCriteria = styled.div`
 const ContainerScoreCriteriaComment = styled.div`
     margin-top: 20px;
     .comment{
+        font-style: italic;
+        color: #7e8080;
         margin-bottom: 24px;
         padding: 20px;
         background-color: #ffffff;
@@ -99,10 +107,11 @@ const ContainerScoreCriteriaComment = styled.div`
 
 
 function Comment({review}) {
-    const nomComplet = "Bamba alpha"
+    const nomComplet = review.user.username;
     const nom =  nomComplet.slice(0,1).toUpperCase();
 
-    console.log(review)
+    const createdAt = new Date("2025-11-11T17:26:10.357Z");
+    const dateRelative = formatDistanceToNow(createdAt, { addSuffix: true, locale: fr });
 
     return (
         <CommentContainer>
@@ -112,7 +121,7 @@ function Comment({review}) {
                 </FirstLetterName>
                 <div>
                     <p>{nomComplet}</p>
-                    <p>il ya 2jour</p>
+                    <p>{dateRelative}</p>
                     
                 </div>
              </HeaderComment>
@@ -120,9 +129,9 @@ function Comment({review}) {
                          <p className="comment">{review.comment}</p>
                          <ContainerScoreCriteria>
                             {
-                                review.scores.map((score) => (
+                                review.reviewScores.map((score) => (
                                     <ScoreCriteria note={score.value} key={score.id}>
-                                        <p>{score.criteria.label} </p>
+                                        <p>{score.criteria.label}</p>
                                         <p>{score.value}</p>
                                     </ScoreCriteria>
                                 ))

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Universites from "../components/Universites";
 
 const AccueilContainer = styled.div`
-  margin-top: 150px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -7,6 +7,18 @@ import { useFetch } from "../../utils/hooks";
 const StyledUniversitescontenair = styled.div`
   margin: 100px 100px 50px 100px;
 
+  .nombreDecoles {
+    position: sticky;
+    top: 84px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+  }
+
    @media (max-width: 768px) {
     margin: 50px 20px;
   }
@@ -16,6 +28,8 @@ const StylesdCard = styled.div`
   display: grid;
   gap: 40px;
   grid-template-columns: repeat(3, 1fr);
+  margin-top: 20px;
+
 
   /* Pour les tablettes */
   @media (max-width: 1024px) {
@@ -45,7 +59,7 @@ function Universites() {
               {
                 datas && (
                   <div>
-                  <h3> {datas.length} ecoles trouvées</h3>
+                  <h3 className="nombreDecoles"> {datas.length} ecoles trouvées</h3>
                   <StylesdCard>
                     {datas.map((data, index) => (
                         <Cards

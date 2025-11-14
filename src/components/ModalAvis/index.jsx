@@ -1,8 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { BookOpen, Building, Users, Wallet, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { getScoreColor } from "../../utils/styles/colors";
 import { getScoreEmoji } from "../../utils/styles/Emoji";
+import { useMutation } from "../../utils/hooks";
+import { base_url_local } from "../../utils/api";
+import { useParams } from "react-router-dom";
 
 // ✨ Le fond sombre derrière la modal
 const ModalOverlay = styled.div`
@@ -71,176 +74,184 @@ const Section = styled.div`
 `;
 
 // 🎯 Le composant Modal
-function Modal({ isOpen, onClose, onSubmit }) {
+function Modal({ isOpen, onClose }) {
+  const { mutate } = useMutation();
+  const [message, setMessage] = useState("");
+
+  const {id} = useParams() || null;
+  const schoolId = Number(id);
+
+  const userId = JSON.parse(localStorage.getItem("user")).id || null;
+
   const [formData, setFormData] = useState({
-    schoolId: '',
-    filiere: '',
-    startYear: '',
-    endYear: '',
-    scores: {
-      "Cours théoriques": "",
-      "Cours pratiques": "",
-      "Cadre étudiant": "",
-      "Frais": ""
-    },
-    comment: '',
-    proofFile: null
+    userId: userId,
+    schoolId: schoolId,
+    comment: "",
+    reviewScores: [
+      { criteriaId: 1, value: "" },
+      { criteriaId: 2, value: "" },
+      { criteriaId: 3, value: "" },
+      { criteriaId: 4, value: "" },
+    ],
   });
 
-  // Si isOpen est false, on n'affiche rien
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   const scoreOptions = ["Très bien", "Bien", "Moyen", "Mauvais"];
-  
-  // Vérifier que tous les scores sont remplis ET que le commentaire >= 50 caractères
-  const allScoresFilled = Object.values(formData.scores).every(score => score !== "");
-  let canSubmit = false;
-    if((formData.comment.length === 0 && allScoresFilled) || (formData.comment.length >= 20 && allScoresFilled)) {
-      canSubmit = true;
-    }
-    else if (formData.comment.length >= 0 && formData.comment.length <= 20 && allScoresFilled) {
-      canSubmit = false;
-    }
-  
-  
+  const criteriaOptions = [
+    { criteriaId: 1, value: "Cours théoriques" },
+    { criteriaId: 2, value: "Cours pratiques" },
+    { criteriaId: 3, value: "Cadre étudiant" },
+    { criteriaId: 4, value: "Frais scolaires" },
+  ];
 
-  // Gérer la soumission
-  const handleSubmit = () => {
-    if (canSubmit) {
-      onSubmit(formData);
-      // Réinitialiser le formulaire après soumission
+  // Vérifie si tous les scores sont remplis
+  const allScoresFilled = formData.reviewScores.every((s) => s.value !== "");
+  const canSubmit =
+    allScoresFilled && formData.comment.trim().length >= 20;
+
+  // ✅ Met à jour la valeur d’un score
+  const handleSelectScore = (criteriaId, option) => {
+    setFormData((prev) => ({
+      ...prev,
+      reviewScores: prev.reviewScores.map((s) =>
+        s.criteriaId === criteriaId ? { ...s, value: option } : s
+      ),
+    }));
+  };
+
+  // ✅ Soumission
+  const handleSubmit = async () => {
+    if (!canSubmit) return;
+
+    const token = localStorage.getItem("token");
+
+    const response = await mutate(base_url_local + "review/new-review", {
+      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (response.status === "success") {
+      setMessage(response.message);
+      setTimeout(() => {
+              onClose();
+      } , 1000);
+      // Réinitialisation du formulaire
       setFormData({
-        schoolId: '',
-        filiere: '',
-        startYear: '',
-        endYear: '',
-        scores: {
-          "Cours théoriques": "",
-          "Cours pratiques": "",
-          "Cadre étudiant": "",
-          "Frais": ""
-        },
-        comment: '',
-        proofFile: null
+        userId: userId,
+        schoolId: schoolId,
+        comment: "",
+        reviewScores: formData.reviewScores.map((s) => ({
+          ...s,
+          value: "",
+        })),
       });
     }
   };
 
   return (
     <ModalOverlay onClick={onClose}>
-      {/* stopPropagation empêche la fermeture quand on clique dans la modal */}
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        {/* Bouton X pour fermer */}
         <CloseButton onClick={onClose}>×</CloseButton>
-        
-        {/* Section 1 : Notation */}
+
+        {/* SECTION 1 — NOTES */}
         <Section>
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">⭐</span>
+          <div className="bg-white rounded-2xl shadow-lg border p-6 sm:p-8">
+            <h2 className="text-lg font-bold mb-4">Note ton expérience</h2>
+            {criteriaOptions.map((criteria, idx) => (
+              <div key={criteria.criteriaId} className="mb-5">
+                <label className="font-semibold text-sm text-gray-800">
+                  {criteria.value} <span className="text-red-500">*</span>
+                </label>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+                  {scoreOptions.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() =>
+                        handleSelectScore(criteria.criteriaId, option)
+                      }
+                      className={`px-4 py-2 rounded-xl border-2 transition-all text-sm ${
+                        getScoreColor(
+                          option,
+                          formData.reviewScores.find(
+                            (s) => s.criteriaId === criteria.criteriaId
+                          )?.value === option
+                        )
+                      }`}
+                    >
+                      <div className="text-lg mb-1">
+                        {getScoreEmoji(option)}
+                      </div>
+                      {option}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div>
-                <h2 className="text-[1rem] font-bold text-gray-900">Note ton expérience</h2>
-                <p className="text-[0.8rem] text-gray-600">Évalue chaque aspect honnêtement</p>
-              </div>
-            </div>
-            
-            <div className="h-70">
-              {Object.keys(formData.scores).map((criteria, idx) => {
-                const icons = [BookOpen, Building, Users, Wallet];
-                const colors = ['text-blue-600', 'text-green-600', 'text-purple-600', 'text-orange-600'];
-                const Icon = icons[idx];
-                const color = colors[idx];
-                
-                return (
-                  <div key={criteria} className="border-b border-gray-100 pb-5 last:border-0">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Icon size={18} className={color} />
-                      <label className=" text-[0.8rem] font-semibold text-gray-900">{criteria}</label>
-                      <span className="text-red-500 text-sm ">*</span>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      {scoreOptions.map(option => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => setFormData({
-                            ...formData,
-                            scores: { ...formData.scores, [criteria]: option }
-                          })}
-                          className={`px-4 h-15 rounded-xl border-2 transition-all font-medium text-[0.7rem] ${
-                            getScoreColor(option, formData.scores[criteria] === option)
-                          }`}
-                        >
-                          <div className="text-[1rem]  mb-1">{getScoreEmoji(option)}</div>
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+            ))}
+          </div>
+        </Section>
+
+        {/* SECTION 2 — COMMENTAIRE */}
+        <Section>
+          <div className="bg-white rounded-2xl shadow-lg border p-6 sm:p-8">
+            <textarea
+              value={formData.comment}
+              onChange={(e) =>
+                setFormData({ ...formData, comment: e.target.value })
+              }
+              rows="5"
+              placeholder="✍️ Parle de ton expérience..."
+              className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500"
+            ></textarea>
+            <div className="flex justify-between mt-2 text-sm text-gray-500">
+              <span>{formData.comment.length} / 20 caractères minimum</span>
+              {formData.comment.length >= 20 && (
+                <span className="text-green-600 flex items-center gap-1">
+                  <CheckCircle size={16} /> Parfait !
+                </span>
+              )}
             </div>
           </div>
         </Section>
 
-        {/* Section 2 : Commentaire */}
+        {/* SECTION 3 — SUBMIT */}
         <Section>
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8">
-            <div className="mb-6">
-              
-              <textarea
-                value={formData.comment}
-                onChange={(e) => setFormData({...formData, comment: e.target.value})}
-                rows="6"
-                placeholder="✍️ Commenter, Donne des détails utiles aux futurs étudiantsParle des profs, du matériel, de l'ambiance, des stages, des débouchés... Sois honnête et constructif !"
-                className="w-full px-4 h-20 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none text-gray-900"
-              ></textarea>
-              <div className="flex items-center justify-between mt-2">
-                <p className="text-sm text-gray-500">
-                  {formData.comment.length} / 20 caractères minimum
-                </p>
-                {formData.comment.length >= 50 && (
-                  <span className="text-sm text-green-600 font-medium flex items-center gap-1">
-                    <CheckCircle size={16} />
-                    Parfait !
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </Section>
-
-        {/* Bouton de soumission */}
-        <Section>
-          <div className="flex gap-3">
-            <button 
-              type="button"
-              onClick={handleSubmit}
-              disabled={!canSubmit}
-              className={`flex-1 px-6 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all shadow-lg ${
-                canSubmit
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 hover:shadow-xl'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
-            >
-              <CheckCircle size={20} />
-              Publier mon avis
-            </button>
-          </div>
-          
-          {!allScoresFilled && formData.comment.length >= 20 && (
-            <p className="text-sm text-orange-600 mt-2 text-center">
-              ⚠️ Veuillez remplir toutes les notes avant de publier
-            </p>
-          )}
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!canSubmit}
+            className={`w-full py-3 rounded-xl font-semibold transition-all ${
+              canSubmit
+                ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-xl"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            <CheckCircle size={18} className="inline-block mr-2" />
+            Publier mon avis
+          </button>
         </Section>
       </ModalContent>
+      {message && (
+        <p
+          className="
+            fixed top-2 left-1/2 -translate-x-1/2 
+            w-[80%] md:w-[40%]
+            h-16 flex items-center justify-center
+            text-center text-white bg-black
+            p-2 rounded-md text-sm font-medium shadow
+          "
+        >
+          {message}
+        </p>
+      )}
     </ModalOverlay>
   );
 }
+
 
 export default Modal;
