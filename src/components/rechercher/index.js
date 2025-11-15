@@ -8,6 +8,7 @@ const SearchBar = styled.div`
   max-width: 500px;
   background: white;
   border: 1px solid #ccc;
+  height: 33px;
   border-radius: 30px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -21,17 +22,13 @@ const SearchBar = styled.div`
   }
 
   input[type="button"] {
-    background-color: #b4b5b6ff;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 5px 20px;
     cursor: pointer;
     font-weight: bold;
     transition: background 0.3s ease;
-
-    &:hover {
-      background-color: #4889d0ff;
-    }
+    border-left: 1px solid #ccc;
   }
 
   @media (max-width: 768px) {
@@ -49,7 +46,6 @@ function Rechercher() {
                 <input type="text" placeholder="Rechercher une école..." />
                 <input type="button" value="🔍" />
             </SearchBar>
-            
         </>
     )
 }   

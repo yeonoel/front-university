@@ -36,7 +36,7 @@ function Connexion() {
                 setMessage('Inscription réussie ! 🎉');
                 setFormData({ emailOrUsername: '', password: '' });
                 login(data.token, data.user);
-                navigate('/');
+                navigate('/Accueil');
             } else {
                 setError(data.message || 'Erreur lors de la connexion');
             }
@@ -51,9 +51,9 @@ function Connexion() {
         <div className="min-h-screen bg-gray flex justify-center">
             
             {/* Section principalee */}
-            <div className=" flex border border-white-300 items-center w-96 justify-center  ">
+            <div className=" flex  items-center w-96 justify-center">
                 <div className="w-full border border-white   rounded-2xl p-8">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
+                    <h2 className={`text-3xl font-bold  text-gray-800 dark:text-white  mb-2 text-center`}>
                         Connexion
                     </h2>
                     <p className="text-gray-500 text-center mb-8">
@@ -62,7 +62,7 @@ function Connexion() {
 
                     <div className="space-y-5">
                         <div>
-                            <label htmlFor="emailOrUsername" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="emailOrUsername" className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                                 Nom d'utilisateur ou adresse email
                             </label>
                             <input
@@ -78,7 +78,7 @@ function Connexion() {
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">
                                 Mot de passe
                             </label>
                             <input

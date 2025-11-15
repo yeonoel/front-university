@@ -1,24 +1,30 @@
 import styled from "styled-components";
-import {colors, colorBackground, colorText } from "../../utils/styles/colors";
+import { colors, colorBackground, colorText, getRatingColor } from "../../utils/styles/colors";
 import { useNavigate } from "react-router-dom";
 import { formatRatingDisplay } from "../../utils/rating/rating";
-
 
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 15px 30px;
-  background-color: ${colors.backgroundLight};
-  border-radius: 5px;
+  padding: 20px;
+  background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
+  color: ${({ isDarkMode }) => isDarkMode ? colors.white : colors.slate900};
+  border: 1px solid rgba(139, 92, 246, 0.2); /* purple-500 avec opacité */
+  border-radius: 12px;
   width: 300px;
   height: 250px;
-  transition: 200ms;
+  transition: all 300ms ease;
+  
   &:hover {
     cursor: pointer;
-    box-shadow: 2px 2px 10px #ffffffff;
+    background: ${({ isDarkMode }) => isDarkMode ? colorBackground.darkHover : colorBackground.lightHover};
+
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+    transform: translateY(-4px);
   }
-`
+`;
 
 const CardHeader = styled.div`
   display: flex;
@@ -26,61 +32,67 @@ const CardHeader = styled.div`
   gap: 15px;
   width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis;
 
   h3 {
-    flex: 1; /* prend l'espace restant */
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* coupe proprement les textes longs */
+    text-overflow: ellipsis;
+    letter-spacing: -0.02em;
   }
 `;
 
 const CardImage = styled.img`
-  flex-shrink: 0; /* empêche l’image de se réduire */
+  flex-shrink: 0;
   height: 60px;
   width: 60px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: #f5f5f5;
+  background-color: ${colors.slate700};
+  border: 2px solid rgba(139, 92, 246, 0.3);
 `;
-
 
 const CardContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
   justify-content: space-between;
 
   .typesCle {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    flex-wrap: wrap;
 
     span {
-      font-size: 10px;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-weight: 800;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
     }
 
-    /* différents backgrounds pour chaque span */
+    /* Type d'école */
     span:nth-child(1) {
-      background-color: #e4e4e7ff; /* Type: bleu */
-      color: #706f6fff;
+      background-color: rgba(139, 92, 246, 0.1);
+      color: #A78BFA; /* purple-400 */
+      border: 1px solid rgba(139, 92, 246, 0.2);
     }
 
+    /* Niveau de prix - UTILISE VOS VARIABLES EXISTANTES */
     span:nth-child(2) {
-       background-color:${({priceLevel}) => colorBackground[priceLevel]}; /* Commune: orange */
-       color: ${({priceLevel}) => colorText[priceLevel]};
+      background-color: ${({priceLevel}) => colorBackground[priceLevel] || 'rgba(139, 92, 246, 0.1)'};
+      color: ${({priceLevel}) => colorText[priceLevel] || colors.textSecondary};
+      border: 1px solid ${({priceLevel}) => colorText[priceLevel] ? `${colorText[priceLevel]}33` : 'rgba(139, 92, 246, 0.2)'};
     }
 
+    /* Commune */
     span:nth-child(3) {
-      background-color: #c5d2f7ff; /* Prix: vert */
-      color: #343871ff;
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #60A5FA; /* blue-400 */
+      border: 1px solid rgba(59, 130, 246, 0.2);
     }
   }
 `;
@@ -88,49 +100,62 @@ const CardContent = styled.div`
 const FiliereText = styled.div`
   ul {
     display: flex;
-    justify-content: space-between; /* répartit les 3 éléments sur toute la largeur */
+    justify-content: space-between;
     align-items: center;
     list-style-type: none;
     padding: 0;
     margin: 0;
     width: 100%;
-    gap: 10px;
+    gap: 8px;
   }
 
   li {
-    flex: 1; /* chaque élément prend une part égale */
-    text-align: center; /* centre le texte dans sa case */
-    background-color: #ececec;
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 10px;
-    white-space: nowrap; /* empêche le texte de couper */
-    overflow: hidden; /* masque ce qui dépasse */
-    text-overflow: ellipsis; /* ajoute "..." si c’est trop long */
+    flex: 1;
+    text-align: center;
+    background-color: rgba(139, 92, 246, 0.05);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    transition: all 200ms ease;
+
+    &:hover {
+      background-color: rgba(139, 92, 246, 0.1);
+      color: ${colors.textPrimary};
+    }
   }
 `;
 
-
-
-
-const StyledNote = styled.span`
-  font-weight: bold;
-  color: #FFA500;
-  margin-bottom: 10px;
+const StyledNote = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 18px;
+  color: ${({rating}) => getRatingColor(rating)};
+  
+  &::before {
+    content: "★";
+    font-size: 20px;
+  }
 `;
 
-
-function Cards({school, id, name, logo, type, filieres, priceLevel, commune}) {
+function Cards({school, id, name, logo, type, filieres, priceLevel, commune, isDarkMode}) {
   const navigate = useNavigate();
+  const rating = parseFloat(formatRatingDisplay(school));
 
   const handleClick = () => {
     navigate(`/universite/${id}`);
-  }
+  };
 
   return (
-    <CardWrapper onClick={handleClick}>
+    <CardWrapper isDarkMode={isDarkMode} onClick={handleClick}>
       <CardHeader>
-        <CardImage src={logo} alt="Logo de l'université" className="card-logo" />
+        <CardImage src={logo} alt={`Logo de ${name}`} />
         <h3>{name}</h3>
       </CardHeader>
 
@@ -140,18 +165,23 @@ function Cards({school, id, name, logo, type, filieres, priceLevel, commune}) {
           <span>{priceLevel}</span>
           <span>{commune}</span>
         </div>
-        <StyledNote>{formatRatingDisplay(school)} </StyledNote>
+        
+        <StyledNote rating={rating}>
+          {formatRatingDisplay(school)}
+        </StyledNote>
+        
         <FiliereText>
           <ul>
-            {filieres && filieres.map((filiere) => (
-              <li key={filiere.id}>{filiere.name}</li>
+            {filieres && filieres.slice(0, 3).map((filiere) => (
+              <li key={filiere.id} title={filiere.name}>
+                {filiere.name}
+              </li>
             ))}
           </ul>
         </FiliereText>
-
       </CardContent>
     </CardWrapper>
-  )
+  );
 }
 
 export default Cards;

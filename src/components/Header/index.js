@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import logo from "../../assets/logo.png";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../utils/hooks";
+import { useAuth, useTheme } from "../../utils/hooks";
 import avatar_user_connected from "../../assets/avatar_user_connected.jpg";
 import DropdownUser from "../openDropDownUser";
-import Filtre from "../Filtre";
+import { Shield } from "lucide-react";
+import { colors } from "../../utils/styles/colors";
 
 const StyledHeader = styled.header`
   box-sizing: border-box;
@@ -15,9 +15,8 @@ const StyledHeader = styled.header`
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: white;
-  padding: 15px 100px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 100px;
+  background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
 
   @media (max-width: 768px) {
     padding: 10px 20px;
@@ -45,38 +44,29 @@ const StyledSpan = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   gap: 10px;
   white-space: nowrap;
   cursor: pointer;
+  color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
 
   @media (max-width: 768px) {
     font-size: 18px;
   }
 `;
 
-const StyledLogo = styled.img`
-  height: 40px;
-  width: 40px;
-
-  @media (max-width: 768px) {
-    height: 30px;
-    width: 30px;
-  }
-`;
-
-
-
 const ConnexionButton = styled.button`
   border: none;
-  padding: 10px 25px;
+  padding: 9px 20px;
   border-radius: 25px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 12px;
   white-space: nowrap;
   transition: background 0.3s ease;
+  background: ${colors.primaryGradient};
+  color: ${colors.white};
 
   @media (max-width: 768px) {
     display: none;
@@ -113,6 +103,7 @@ const UserAvatar = styled.img`
 
 
 function Nav() {
+  const {theme} = useTheme();
   const [opendropdownUser, setOpenDropdownUser] = useState(false);
   const navigate = useNavigate();
   const handleHomePage = () => navigate("/");
@@ -139,26 +130,25 @@ function Nav() {
   }, [opendropdownUser]);
 
   return (
-    <StyledHeader>
+    <StyledHeader isDarkMode={theme === "dark"}>
       <TopRow>
-        <StyledSpan onClick={handleHomePage}>
-          <StyledLogo src={logo} alt="logo" />
-          EcoleInfo CI
+        <StyledSpan isDarkMode={theme === "dark"} onClick={handleHomePage}>
+            <div className="w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                <Shield className="w-4 h-4 text-white" />
+              </div>
+          TechCampus
         </StyledSpan>
-
-        <Filtre />
 
         {isAuthenticated ? (
           <UserAvatarContainer ref={avatarRef}>
             <UserAvatar 
-              src={avatar_user_connected} 
+              src={avatar_user_connected}
               alt="Avatar utilisateur" 
               onClick={handleDropdownUser}
             />
           </UserAvatarContainer>
         ) : (
           <ConnexionButton 
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 shadow-lg hover:shadow-xl" 
             onClick={handleConnexionPage}
           >
             Se connecter

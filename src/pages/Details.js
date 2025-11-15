@@ -14,17 +14,17 @@ import ToggleComment from "../components/toggleComment";
 import Comment from "../components/comments";
 import Modal from "../components/ModalAvis";
 import { base_url_local } from "../utils/api";
-import { useFetch } from "../utils/hooks";
+import { useFetch, useTheme } from "../utils/hooks";
 import { Loader } from "../utils/styles/Atom";
+import { colors } from "../utils/styles/colors";
 
 
 // 🧩 Conteneur principal
 const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 90px auto 0px auto;
+  margin: 120px auto 0px auto;
   align-items: center;
-
   gap: 20px;
 `;
 
@@ -44,8 +44,11 @@ const ImageGallery = styled.div`
 `;
 
 const StyledTitle = styled.div`
-  border-bottom: 1px dashed #000000;
+  border-bottom: 1px dashed ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};;
   margin-bottom: 20px;
+  position: sticky;
+  top: 50px;
+  background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
   display: flex;
   justify-content: space-between;
   align-self: flex-start;
@@ -54,6 +57,7 @@ const StyledTitle = styled.div`
   margin: auto;
   padding: 30px 20px;
   align-items: center;
+    color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
 
   .nameNote {
     width: 70%;
@@ -101,29 +105,28 @@ const StyledTitle = styled.div`
       }
     }
       @media (max-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 10px;
-    .nameNote {
-      width: 50%;      
-      h2 {
-        font-size: 1rem;
-      }
-        p {
-          font-size: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
+        .nameNote {
+          width: 50%;      
+          h2 {
+            font-size: 1rem;
+          }
+            p {
+              font-size: 1rem;
+            }
         }
-    }
-    button {
-      font-size: 0.5rem;
-      padding: 0 10px;
-    }
-  }
-
+        button {
+          font-size: 0.5rem;
+          padding: 0 10px;
+        }
+      }
 }`;
 
 const ContentImages = styled.div`
   width: 100%;
-  background-color: #ffffffff;
+    background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
 `;
 
 // Grande image à gauche
@@ -217,10 +220,11 @@ const CommentContainer = styled.div`
 
 function Details() {
   const { id } = useParams();
+  const {theme} = useTheme();
   console.log("ID de l'école :", id);
   
   const [currentIndex, setCurrentIndex] = useState(0);
-   // 🎛️ STATE : est-ce que la modal est ouverte ?
+   // est-ce que la modal est ouverte ?
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {datas, isLoading, error} = useFetch(base_url_local+'school/detail-university/'+id);
@@ -281,11 +285,11 @@ function Details() {
   };
 
   return (
-    <DetailsContainer>
+    <DetailsContainer isDarkMode={theme ==="dark"}>
 
       {/* 🖼️ Version Desktop */}
-      <ContentImages>
-        <StyledTitle>
+      <ContentImages isDarkMode={theme ==="dark"}>
+        <StyledTitle isDarkMode={theme ==="dark"}>
           <div className="nameNote"> 
             <img src={datas.logo} className="h-16 w-16" alt="logo" /> 
             <div>

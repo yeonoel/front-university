@@ -1,13 +1,16 @@
 import styled from "styled-components";
-import { colorBackground, colorText } from "../../utils/styles/colors";
+import { colorBackground, colors, colorText } from "../../utils/styles/colors";
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useTheme } from "../../utils/hooks";
 
 const CommentContainer = styled.div`
-    background-color: white;
+    background: ${({ isDarkMode }) => isDarkMode ? colorBackground.darkHover : colorBackground.lightHover};
+    color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
 
     @media (max-width: 768px) {
         font-size: 12px;
@@ -20,12 +23,11 @@ const FirstLetterName = styled.div`
     font-size: 20px;
     background-color: orange;
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
 `;
 
 const HeaderComment = styled.div`
@@ -35,8 +37,8 @@ const HeaderComment = styled.div`
     child:nth-child(2){
         magin-left: 20px;
     }
-        line-height: 20px;
-        font-size: 14px;
+    line-height: 20px;
+    font-size: 14px;
         
 `;
 
@@ -60,8 +62,6 @@ const ScoreCriteria = styled.div`
   margin-bottom: 10px;
   padding-bottom: 10px;
 
-  
-
   p:nth-of-type(2) {
     font-weight: bold;
     display: flex;
@@ -73,7 +73,6 @@ const ScoreCriteria = styled.div`
     width: 100px;
     justify-content: center;
     font-size: 15px;
-    color: white;
   }
 
   @media (max-width: 768px) {
@@ -90,15 +89,13 @@ const ContainerScoreCriteriaComment = styled.div`
     margin-top: 20px;
     .comment{
         font-style: italic;
-        color: #7e8080;
         margin-bottom: 24px;
         padding: 20px;
-        background-color: #ffffff;
         border-radius: 12px;
-        border: 1px solid #e5e7eb;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         transition: box-shadow 0.2s ease;
-
+        color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
+        
         &:hover {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
         }
@@ -107,6 +104,7 @@ const ContainerScoreCriteriaComment = styled.div`
 
 
 function Comment({review}) {
+    const {theme} = useTheme();
     const nomComplet = review.user.username;
     const nom =  nomComplet.slice(0,1).toUpperCase();
 
@@ -114,7 +112,7 @@ function Comment({review}) {
     const dateRelative = formatDistanceToNow(createdAt, { addSuffix: true, locale: fr });
 
     return (
-        <CommentContainer>
+        <CommentContainer isDarkMode={theme === "dark"}>
              <HeaderComment>
                 <FirstLetterName>
                     {nom}
@@ -122,10 +120,9 @@ function Comment({review}) {
                 <div>
                     <p>{nomComplet}</p>
                     <p>{dateRelative}</p>
-                    
                 </div>
              </HeaderComment>
-             <ContainerScoreCriteriaComment>
+             <ContainerScoreCriteriaComment isDarkMode={theme === "dark"}>
                          <p className="comment">{review.comment}</p>
                          <ContainerScoreCriteria>
                             {

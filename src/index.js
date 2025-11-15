@@ -9,6 +9,8 @@ import './index.css';
 import Inscription from './pages/inscription';
 import MainLayout from './Layout/mainLayout';
 import Connexion from './pages/connexion';
+import LandingPage from './pages/LandingPage';
+import AjouterAvis from './pages/AjouterAvis';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +19,9 @@ root.render(
       <AuthProvider>
         <GlobalStyle />
         <Routes>
-          <Route path="/" element={<MainLayout> <Accueil /> </MainLayout>} />
+          <Route path="/" element={ <LandingPage />} />
+          <Route path="/ajouteravis" element={ <AjouterAvis />} />
+          <Route path="/Accueil" element={<MainLayout><Accueil /></MainLayout>} />
           <Route path="/universite/:id" element={<MainLayout><Details /></MainLayout>} />
           <Route path="/inscription" element={<Inscription />} />
           <Route path="/connexion" element={<Connexion />} />
