@@ -16,7 +16,21 @@ import { Loader } from "../utils/styles/Atom";
 import { colors } from "../utils/styles/colors";
 import { useParams } from "react-router-dom";
 import ButtonAvis from "../components/Button/ButtonAvis";
+import { MapPin } from "lucide-react";
 
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import L from 'leaflet';
+
+
+const CustomIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
 // 🧩 Conteneur principal
 const DetailsContainer = styled.div`
@@ -238,9 +252,6 @@ const CommentContainer = styled.div`
 `;
 
 
-
-
-
 const PageWrapper = styled.div`
   display: flex;
   gap: 30px;
@@ -254,24 +265,33 @@ const PageWrapper = styled.div`
   }
 `;
 
-const FiliereContainer = styled.div`
-  /* Desktop : Sidebar fixe à gauche */
-  @media (min-width: 969px) {
+const ContainerBloc = styled.div`
+    
+    @media (min-width: 969px) {
     position: sticky;
     top: 100px; /* Distance du haut (sous le header) */
     align-self: flex-start;
     width: 250px;
     max-height: calc(100vh - 120px); /* Hauteur max pour ne pas dépasser l'écran */
-    overflow-y: auto; /* Scroll si trop de filières */
     flex-shrink: 0;
   }
 
-  /* Mobile : En bas de la page */
-  @media (max-width: 968px) {
+   @media (max-width: 968px) {
     order: 2; /* Place après le contenu principal */
     width: 100%;
   }
 
+`
+
+
+const FiliereContainer = styled.div`
+
+  @media (min-width: 969px) {
+    
+    overflow-y: auto; /* Scroll si trop de filières */
+    flex-shrink: 0;
+  }
+  
   h1 {
     font-size: ${({ theme }) => theme === 'dark' ? '24px' : '22px'};
     margin-bottom: 20px;
@@ -332,6 +352,61 @@ const FiliereName = styled.div`
   }
 `;
 
+const LocationContainerWrapper = styled.div`
+
+  margin-top: 30px; /* petit espace sous les filières */
+
+  @media (max-width: 968px) {
+    position: relative;
+    top: auto;
+    width: 100%;
+    margin-top: 12px; /* s’aligne sous les filières */
+  }
+`;
+
+const LocationButton = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: ${({ theme }) => theme === "dark" ? "rgba(72, 55, 140, 0.15)" : "rgba(139, 92, 246, 0.1)"};
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme === "dark" ? "rgba(72, 55, 140, 0.25)" : "rgba(139, 92, 246, 0.2)"};
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    color: ${({ theme }) => theme === 'dark' ? colors.textPrimary : colors.textSecondary};
+  }
+`;
+
+
+const MiniMap = styled.div`
+  width: 100%;
+  height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  
+  /* AJOUTEZ CES LIGNES pour que Leaflet s'affiche correctement */
+  .leaflet-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+  }
+`;
+
+
 
 
 
@@ -387,21 +462,25 @@ function Details() {
     setIsModalOpen(false);
   };
 
-  // 📤 FONCTION : Recevoir les données du formulaire
   const handleFormSubmit = (formData) => {
-    
-    // - Envoyer à une API
-    // - Ajouter à une liste
-    // - Sauvegarder dans une base de données
-    
     alert(`Merci ${formData.name} ! Votre avis a été enregistré.`);
-    
-    // Fermer la modal après soumission
     handleCloseModal();
   };
 
+  const openMap = () => {
+  if (!datas.latitude || !datas.longitude) return;
+
+  const lat = datas.latitude;
+  const lng = datas.longitude;
+
+  // Ouvre Google Maps avec itinéraire depuis l'emplacement actuel
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  window.open(url, "_blank");
+};
+
   return (
     <PageWrapper>
+      <ContainerBloc>
         <FiliereContainer isDarkMode={theme ==="dark"}>
           <h1>Filières</h1>
           <FiliereName>
@@ -411,8 +490,33 @@ function Details() {
               ))
             }
           </FiliereName>
-          div
         </FiliereContainer>
+        {datas.latitude && datas.longitude && (
+          <LocationContainerWrapper>
+            <LocationButton onClick={openMap} theme={theme}>
+              <MapPin size={20} color={theme === "dark" ? "#fff" : "#222"} />
+              <span>Voir sur la carte</span>
+            </LocationButton>
+
+            <MiniMap>
+              <MapContainer
+                center={[datas.latitude, datas.longitude]}
+                zoom={13}
+                style={{ width: "100%", height: "100%" }}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[datas.latitude, datas.longitude]} icon={CustomIcon}>
+                  <Popup>{datas.name}</Popup>
+                </Marker>
+              </MapContainer>
+            </MiniMap>
+          </LocationContainerWrapper>
+        )}
+      </ContainerBloc>
+        
         <DetailsContainer isDarkMode={theme ==="dark"}>
 
         {/* 🖼️ Version Desktop */}
@@ -491,6 +595,7 @@ function Details() {
           schoolId={id}
         />
         </DetailsContainer>
+        
     </PageWrapper>
   );
 }
