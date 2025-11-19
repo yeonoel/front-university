@@ -1,4 +1,6 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 
 const SearchBar = styled.div`
@@ -8,7 +10,7 @@ const SearchBar = styled.div`
   max-width: 500px;
   background: white;
   border: 1px solid #ccc;
-  height: 33px;
+  height: 40px;
   border-radius: 30px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -21,7 +23,7 @@ const SearchBar = styled.div`
     font-size: 16px;
   }
 
-  input[type="button"] {
+  button {
     color: white;
     border: none;
     padding: 5px 20px;
@@ -38,17 +40,41 @@ const SearchBar = styled.div`
   }
 `;
 
-
 function Rechercher() {
-    return (
-        <>
-            <SearchBar>
-                <input type="text" placeholder="Rechercher une école..." />
-                <input type="button" value="🔍" />
-            </SearchBar>
-        </>
-    )
-}   
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+
+  const handleKeyDown = (e) => {
+    if (searchTerm.length  > 50) return;
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleSearch = () => {
+
+    // Pour un paramètre simple
+    navigate(`/Accueil/search?query=${encodeURIComponent(searchTerm)}`);
+
+    // Ou pour plusieurs paramètres
+    // const params = new URLSearchParams({ query: searchTerm, filiere, commune });
+    // navigate(`/Accueil/search?${params.toString()}`);
+  };
+
+  return (
+    <SearchBar>
+      <input
+        type="text"
+        placeholder="Rechercher une école..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <button onClick={handleSearch}>🔍</button>
+    </SearchBar>
+  );
+}
 
 
 export default Rechercher;

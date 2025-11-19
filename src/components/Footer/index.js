@@ -3,6 +3,7 @@ import { useTheme } from '../../utils/hooks';
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone, BookOpen, Star } from 'lucide-react';
 import { colors } from '../../utils/styles/colors';
+import AnimatedCard from '../AnimatedCard/AnimatedCard';
 
 const FooterContainer = styled.footer`
   background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
@@ -12,6 +13,7 @@ const FooterContainer = styled.footer`
   box-shadow: 8px 2px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
+  
 `;
 
 const FooterContent = styled.div`
@@ -142,7 +144,9 @@ function Footer() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <FooterContainer isDarkMode={theme === 'dark'}>
+    
+    <AnimatedCard >
+      <FooterContainer isDarkMode={theme === 'dark'}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* Contenu principal */}
         <FooterContent>
@@ -237,6 +241,8 @@ function Footer() {
         </FooterBottom>
       </div>
     </FooterContainer>
+    </AnimatedCard>
+
   );
 }
 

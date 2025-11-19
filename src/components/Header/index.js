@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth, useTheme } from "../../utils/hooks";
-import avatar_user_connected from "../../assets/avatar_user_connected.jpg";
-import DropdownUser from "../openDropDownUser";
+import { useTheme } from "../../utils/hooks";
 import { Shield } from "lucide-react";
 import { colors } from "../../utils/styles/colors";
+import ConnexionDeconnexion from "../connexionDeconnexion.jsx";
 
 const StyledHeader = styled.header`
   box-sizing: border-box;
@@ -44,7 +42,7 @@ const StyledSpan = styled.span`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
   gap: 10px;
   white-space: nowrap;
@@ -56,110 +54,32 @@ const StyledSpan = styled.span`
   }
 `;
 
-const ConnexionButton = styled.button`
-  border: none;
-  padding: 9px 20px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 12px;
-  white-space: nowrap;
-  transition: background 0.3s ease;
-  background: ${colors.primaryGradient};
-  color: ${colors.white};
 
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const UserAvatarContainer = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const UserAvatar = styled.img`
-  height: 40px;
-  width: 40px;
-  border: 2px solid #e5e7eb;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: border-color 0.3s ease, transform 0.2s ease;
-
-  &:hover {
-    border-color: #4889d0ff;
-    transform: scale(1.05);
-  }
-
-  @media (max-width: 768px) {
-    height: 36px;
-    width: 36px;
-  }
-`;
 
 
 
 function Nav() {
   const {theme} = useTheme();
-  const [opendropdownUser, setOpenDropdownUser] = useState(false);
   const navigate = useNavigate();
   const handleHomePage = () => navigate("/");
-  const { isAuthenticated } = useAuth();
-  const avatarRef = useRef(null);
 
-  const handleConnexionPage = () => navigate("/connexion");
 
-  const handleDropdownUser = (e) => {
-    e.stopPropagation();
-    setOpenDropdownUser(!opendropdownUser);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (avatarRef.current && !avatarRef.current.contains(event.target)) {
-        setOpenDropdownUser(false);
-      }
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [opendropdownUser]);
 
   return (
     <StyledHeader isDarkMode={theme === "dark"}>
       <TopRow>
         <StyledSpan isDarkMode={theme === "dark"} onClick={handleHomePage}>
-            <div className="w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                <Shield className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" />
               </div>
           TechCampus
         </StyledSpan>
 
-        {isAuthenticated ? (
-          <UserAvatarContainer ref={avatarRef}>
-            <UserAvatar 
-              src={avatar_user_connected}
-              alt="Avatar utilisateur" 
-              onClick={handleDropdownUser}
-            />
-          </UserAvatarContainer>
-        ) : (
-          <ConnexionButton 
-            onClick={handleConnexionPage}
-          >
-            Se connecter
-          </ConnexionButton>
-        )}
+          <ConnexionDeconnexion /> 
+
       </TopRow>
 
-      <DropdownUser
-        opendropdownUser={opendropdownUser}
-        setOpenDropdownUser={setOpenDropdownUser}
-      />
+      
     </StyledHeader>
   );
 }

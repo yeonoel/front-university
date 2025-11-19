@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { AuthContext, ThemeContext } from "../context";
 import { useState, useEffect } from "react";
 
@@ -76,4 +76,38 @@ export function useMutation() {
     };
 
     return { mutate, isLoading, error };
+}
+
+export function useSearch() {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const search = useCallback(async (url, filters) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const params = new URLSearchParams();
+
+      if (filters?.filiere) params.append("filiere", filters.filiere);
+      if (filters?.commune) params.append("commune", filters.commune);
+      if (filters?.query) params.append("query", filters.query);
+
+      const response = await fetch(`${url}?${params.toString()}`);
+      const json = await response.json();
+
+      if (!response.ok) {
+        throw new Error(json.message || "Erreur de recherche");
+      }
+
+      setData(json);   // <-- on stocke réellement les datas
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return { data, isLoading, error, search };
 }

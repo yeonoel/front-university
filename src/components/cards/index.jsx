@@ -149,7 +149,7 @@ function Cards({school, id, name, logo, type, filieres, priceLevel, commune, isD
   const rating = parseFloat(formatRatingDisplay(school));
 
   const handleClick = () => {
-    navigate(`/universite/${id}`);
+    navigate(`/detail-university/${id}`);
   };
 
   return (

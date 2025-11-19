@@ -2,18 +2,21 @@ import styled from "styled-components";
 import Cards from "../cards";
 import { base_url_local } from "../../utils/api";
 import { Loader } from "../../utils/styles/Atom";
-import { useFetch, useTheme } from "../../utils/hooks";
+import { useSearch, useTheme } from "../../utils/hooks";
 import { colors } from "../../utils/styles/colors";
 import Rechercher from "../rechercher";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import AnimatedCard from "../AnimatedCard/AnimatedCard";
 
 const StyledUniversitescontenair = styled.div`
-  margin: 100px 100px 50px 100px;
+  margin: 50px 100px 50px 100px;
 
   .containerH3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100px;
+    height: 5px;
 
     .nombreDecoles {
       font-size: 15px;
@@ -37,6 +40,11 @@ const StylesdCard = styled.div`
   gap: 40px;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 20px;
+
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 
 
   /* Pour les tablettes */
@@ -63,10 +71,23 @@ const RechercherContainer = styled.div`
 
 
 function Universites() {
-  const {datas, isLoading, error} = useFetch(base_url_local+'school/all-university');
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
-  console.log("Mes datas", datas);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+
+  const filiere = params.get("filiere");
+  const commune = params.get("commune");
+  const query = params.get("query");
+
+
+  const { data: datas, isLoading, error, search } = useSearch();
+
+  // Appeler la recherche uniquement quand filiere/commune changent
+  useEffect(() => {
+    search(`${base_url_local}school/search`, { filiere, commune, query });
+  }, [filiere, commune, query, search]);
+
 
   if(error) {
     return <span>Oups il y a eu un problème</span>;
@@ -88,9 +109,9 @@ function Universites() {
                   </div>
                   <StylesdCard>
                     {datas.map((data, index) => (
+                      <AnimatedCard key={`${index}-${data.name}`} delay={index * 100}>
                         <Cards
                           isDarkMode={theme === 'dark'}
-                          key={`${index}-${data.name}${index}`}
                           school={data}
                           id={data.id}
                           name={data.name}
@@ -100,8 +121,8 @@ function Universites() {
                           priceLevel={data.priceLevel}
                           commune={data.commune}
                         />
-                      ))
-                    }
+                      </AnimatedCard>
+                    ))}
                   </StylesdCard>
                 </div>
                 )

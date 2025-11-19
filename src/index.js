@@ -7,10 +7,11 @@ import {AuthProvider, ThemeProvider} from './utils/context';
 import Details from './pages/Details';
 import './index.css';
 import Inscription from './pages/inscription';
-import MainLayout from './Layout/mainLayout';
+import MainLayout from './Layout/MainLayout';
 import Connexion from './pages/connexion';
 import LandingPage from './pages/LandingPage';
 import AjouterAvis from './pages/AjouterAvis';
+import PublicRoute from './Layout/PublicRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,9 +23,10 @@ root.render(
           <Route path="/" element={ <LandingPage />} />
           <Route path="/ajouteravis" element={ <AjouterAvis />} />
           <Route path="/Accueil" element={<MainLayout><Accueil /></MainLayout>} />
-          <Route path="/universite/:id" element={<MainLayout><Details /></MainLayout>} />
-          <Route path="/inscription" element={<Inscription />} />
-          <Route path="/connexion" element={<Connexion />} />
+          <Route path="/Accueil/search" element={<MainLayout><Accueil /></MainLayout>} />
+          <Route path="/detail-university/:id" element={<MainLayout><Details /></MainLayout>} />
+          <Route path="/inscription" element={<PublicRoute> <Inscription /></PublicRoute>} />
+          <Route path="/connexion" element={<PublicRoute> <Connexion /></PublicRoute>} />
         </Routes>
         </AuthProvider>
     </ThemeProvider>

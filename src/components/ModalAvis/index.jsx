@@ -5,7 +5,6 @@ import { getScoreColor } from "../../utils/styles/colors";
 import { getScoreEmoji } from "../../utils/styles/Emoji";
 import { useMutation } from "../../utils/hooks";
 import { base_url_local } from "../../utils/api";
-import { useParams } from "react-router-dom";
 
 // ✨ Le fond sombre derrière la modal
 const ModalOverlay = styled.div`
@@ -74,18 +73,18 @@ const Section = styled.div`
 `;
 
 // 🎯 Le composant Modal
-function Modal({ isOpen, onClose }) {
+function Modal({ isOpen, onClose, schoolId }) {
   const { mutate } = useMutation();
   const [message, setMessage] = useState("");
 
-  const {id} = useParams() || null;
-  const schoolId = Number(id);
 
-  const userId = JSON.parse(localStorage.getItem("user")).id || null;
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+
+  const userId = user?.id || null;
 
   const [formData, setFormData] = useState({
-    userId: userId,
-    schoolId: schoolId,
+    userId: "",
+    schoolId: schoolId ,
     comment: "",
     reviewScores: [
       { criteriaId: 1, value: "" },

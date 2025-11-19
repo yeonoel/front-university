@@ -1,141 +1,470 @@
 import React, { useState } from 'react';
 import { Search, Code, Shield, Video, Star, MapPin } from 'lucide-react';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import ConnexionDeconnexion from '../components/connexionDeconnexion.jsx';
+import { colors } from '../utils/styles/colors.js';
+
+const Container = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #faf5ff 100%);
+`;
+
+const Header = styled.header`
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+`;
+
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const LogoIcon = styled.div`
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LogoText = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+`;
+
+const Nav = styled.nav`
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
+`;
+
+const NavButton = styled.button`
+  color: #374151;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #4f46e5;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
+`;
+
+
+
+const Main = styled.main`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
+`;
+
+const Content = styled.div`
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TitleSection = styled.div`
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 2rem;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.75rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+`;
+
+const Subtitle = styled.p`
+  font-size: 1.125rem;
+  color: #6b7280;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+const SearchCard = styled.div`
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+`;
+
+const SearchRow = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const InputWrapper = styled.div`
+  flex: 1;
+  position: relative;
+`;
+
+const IconLeft = styled.div`
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #4f46e5;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 0.875rem;
+  }
+`;
+
+const SearchButton = styled.button`
+  padding: 0.5rem 2rem;
+  background: ${colors.primaryGradient};
+  color: ${colors.white};
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  white-space: nowrap;
+
+  &:hover {
+    background: ${colors.primaryPinkDark};
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+`;
+
+
+const StartButton = styled.button`
+  padding: 0.8rem 4rem;
+  background: ${colors.primaryGradient};
+  color: ${colors.white};
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  white-space: nowrap;
+  display: flex;
+
+  &:hover {
+    background: ${colors.primaryPinkDark};
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+`
+
+const Categories = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    margin-top: 0.5rem;
+  }
+`;
+
+const CategoryLabel = styled.span`
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.875rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+`;
+
+const CategoryButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &:hover {
+    background: #e5e7eb;
+  }
+`;
+
+const StatsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+`;
+
+const StatCard = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
+`;
+
+const StatValue = styled.div`
+  font-size: 2rem;
+  font-weight: 700;
+  color: ${props => props.$color || '#4f46e5'};
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+`;
+
+const StatLabel = styled.div`
+  color: #6b7280;
+  font-size: 0.875rem;
+`;
+
+const Footer = styled.footer`
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+`;
+
+const FooterContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
+`;
+
+const FooterButton = styled.button`
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #4f46e5;
+  }
+`;
 
 function LandingPage() {
-  const [formation, setFormation] = useState('');
-  const [ville, setVille] = useState('');
+  const [filiere, setFiliere] = useState('');
+  const [commune, setCommune] = useState('');
   const navigate = useNavigate();
 
   const categories = [
-    { icon: Code, label: 'Développement', color: 'bg-blue-500' },
-    { icon: Shield, label: 'Cybersécurité', color: 'bg-red-500' },
-    { icon: Video, label: 'Audiovisuel', color: 'bg-purple-500' },
+    { icon: Code, label: 'Développement' },
+    { icon: Shield, label: 'Cybersécurité' },
+    { icon: Video, label: 'Audiovisuel' },
   ];
 
-  const handleSearch = () => {
-    console.log('Recherche:', { formation, ville });
-    navigate('/Accueil');
+  const handleSearch = async () => {
+    if (filiere.length  > 50 || commune.length  > 50 ) return;
+
+    const query = new URLSearchParams({ filiere, commune }).toString();
+    navigate(`Accueil/search?${query}`);
   };
 
+  const handleCategoryClick = (category) => {
+    setFiliere(category.label);
+  }
+
+
   return (
-    <div className="h-screen w-full flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-            <Code className="w-6 h-6 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            TechCampus
-          </h1>
-        </div>
-        <nav className="flex gap-6">
-          <button className="text-gray-700 hover:text-indigo-600 font-medium transition">
-            Écoles
-          </button>
-          <button className="text-gray-700 hover:text-indigo-600 font-medium transition">
-            Comparateur
-          </button>
-          <button onClick={() => navigate('/Connexion')} className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-            Connexion
-          </button>
-        </nav>
-      </header>
+    <Container>
+      <Header>
+        <Logo>
+          <LogoIcon>
+            <Code size={20} color="white" />
+          </LogoIcon>
+          <LogoText>TechCampus</LogoText>
+        </Logo>
+        <Nav>
+          <NavButton>Écoles</NavButton>
+          <NavButton>Comparateur</NavButton>
+          <ConnexionDeconnexion />
+        </Nav>
+      </Header>
 
-      {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-8">
-        <div className="w-full max-w-4xl">
-          {/* Title */}
-          <div className="text-center mb-12">
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">
-              Trouvez votre école du numérique
-            </h2>
-            <p className="text-xl text-gray-600">
-              Comparez les formations, les notes et les frais scolaires
-            </p>
-          </div>
+      <Main>
+        <Content>
 
-          {/* Search Bar */}
-          <div className="bg-white rounded-2xl shadow-2xl p-8 mb-8">
-            <div className="flex gap-4 mb-6">
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
+          <SearchCard>
+            <SearchRow>
+              <InputWrapper>
+                <IconLeft>
+                  <Search size={18} />
+                </IconLeft>
+                <StyledInput
                   type="text"
-                  placeholder="Formation (ex: Développement Web, Cybersécurité...)"
-                  value={formation}
-                  onChange={(e) => setFormation(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none text-lg"
+                  placeholder="filiere (ex: Développement Web, Cybersécurité...)"
+                  value={filiere}
+                  onChange={(e) => setFiliere(e.target.value)}
                 />
-              </div>
-              <div className="flex-1 relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
+              </InputWrapper>
+
+              <InputWrapper>
+                <IconLeft>
+                  <MapPin size={18} />
+                </IconLeft>
+                <StyledInput
                   type="text"
-                  placeholder="Ville"
-                  value={ville}
-                  onChange={(e) => setVille(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none text-lg"
+                  placeholder="commune"
+                  value={commune}
+                  onChange={(e) => setCommune(e.target.value)}
                 />
-              </div>
-              <button
-                onClick={handleSearch}
-                className="px-8 py-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition font-semibold text-lg shadow-lg hover:shadow-xl"
-              >
+              </InputWrapper>
+
+              <SearchButton onClick={handleSearch}>
                 Rechercher
-              </button>
-            </div>
+              </SearchButton>
+            </SearchRow>
 
-            {/* Categories */}
-            <div className="flex gap-3 flex-wrap">
-              <span className="text-gray-600 font-medium">Catégories populaires :</span>
+            <Categories>
+              <CategoryLabel>Catégories populaires :</CategoryLabel>
               {categories.map((cat, idx) => (
-                <button
-                  key={idx}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full transition"
+                <CategoryButton key={idx}
+                  onClick={() => handleCategoryClick(cat)}
                 >
-                  <cat.icon className="w-4 h-4" />
-                  <span className="text-sm font-medium">{cat.label}</span>
-                </button>
+                  <cat.icon size={16} />
+                  <span>{cat.label}</span>
+                </CategoryButton>
               ))}
-            </div>
-          </div>
+            </Categories>
+          </SearchCard>
+          <TitleSection>
+            <Title>Explorez les meilleures écoles d’informatique et du numérique en <span className='text-red-500' >Côte d’Ivoire</span> </Title>
+            <Subtitle>Notes. Avis. Frais. Tout ce qu’il vous faut pour choisir votre futur. </Subtitle>
+          </TitleSection>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center">
-              <div className="text-4xl font-bold text-indigo-600 mb-2">250+</div>
-              <div className="text-gray-600">Écoles référencées</div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center">
-              <div className="flex items-center justify-center mb-2">
-                <Star className="w-8 h-8 text-yellow-400 fill-yellow-400" />
-                <span className="text-4xl font-bold text-gray-900 ml-2">4.5</span>
-              </div>
-              <div className="text-gray-600">Note moyenne</div>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-lg text-center">
-              <div className="text-4xl font-bold text-indigo-600 mb-2">50k+</div>
-              <div className="text-gray-600">Avis étudiants</div>
-            </div>
-          </div>
-        </div>
-      </main>
+          <StartButton onClick={() => navigate('/Accueil')}>
+                Commencer
+          </StartButton>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 px-8 py-4">
-        <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
+        </Content>
+      </Main>
+
+      <Footer>
+        <FooterContent>
           <span>© 2025 TechCampus</span>
-          <button className="hover:text-indigo-600 transition">À propos</button>
-          <button className="hover:text-indigo-600 transition">Contact</button>
-          <button className="hover:text-indigo-600 transition">Conditions</button>
-        </div>
-      </footer>
-    </div>
+          <FooterButton>À propos</FooterButton>
+          <FooterButton>Contact</FooterButton>
+          <FooterButton>Conditions</FooterButton>
+        </FooterContent>
+      </Footer>
+    </Container>
   );
 }
-
-
 
 export default LandingPage;

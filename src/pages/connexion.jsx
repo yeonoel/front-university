@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth, useMutation } from '../utils/hooks';
+import { useAuth, useMutation, useTheme } from '../utils/hooks';
 import { base_url_local } from '../utils/api';
 
 function Connexion() {
@@ -14,6 +14,8 @@ function Connexion() {
     const {login} = useAuth();
     const navigate = useNavigate();
     const {mutate} = useMutation();
+    const {theme} = useTheme();
+    const isDarkMode = theme === 'dark';
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,6 +23,13 @@ function Connexion() {
             ...prev,
             [name]: value
         }));
+    };
+
+    const handleKeyDown = (e) => {
+        if (formData.emailOrUsername.length  > 50 || formData.password.length  > 50 ) return;
+        if (e.key === 'Enter') {
+            handleSubmit(e);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -52,8 +61,11 @@ function Connexion() {
             
             {/* Section principalee */}
             <div className=" flex  items-center w-96 justify-center">
-                <div className="w-full border border-white   rounded-2xl p-8">
-                    <h2 className={`text-3xl font-bold  text-gray-800 dark:text-white  mb-2 text-center`}>
+                <div className={`w-full rounded-2xl p-8 border ${isDarkMode ? 'border-white' : 'border-gray'}`}>
+                    <h2 className={`
+                        text-gray-700
+                        text-3xl font-bold    mb-2 text-center
+                        ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
                         Connexion
                     </h2>
                     <p className="text-gray-500 text-center mb-8">
@@ -62,7 +74,7 @@ function Connexion() {
 
                     <div className="space-y-5">
                         <div>
-                            <label htmlFor="emailOrUsername" className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                            <label htmlFor="emailOrUsername" className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
                                 Nom d'utilisateur ou adresse email
                             </label>
                             <input
@@ -71,14 +83,15 @@ function Connexion() {
                                 name="emailOrUsername"
                                 value={formData.emailOrUsername}
                                 onChange={handleChange}
+                                onKeyDown={handleKeyDown}
                                 required
-                                className="w-full px-4 py-2 bg-gray-50 border border-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                                 placeholder="Email ou username"
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2 dark:text-white">
+                            <label htmlFor="password" className={`block text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
                                 Mot de passe
                             </label>
                             <input
@@ -87,6 +100,7 @@ function Connexion() {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
+                                onKeyDown={handleKeyDown}
                                 required
                                 minLength="6"
                                 className="w-full px-4 py-2 bg-gray-50 border border-gray rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
@@ -114,7 +128,7 @@ function Connexion() {
                             {loading ? 'connexion en cours...' : 'Se connecter'}
                         </button>
 
-                        <p className="text-center text-sm text-gray-600 mt-4">
+                        <p className={`block text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
                             Pas encore un compte ?{' '}
                             <Link to={'/inscription'} className="text-blue-600 hover:text-blue-800 font-medium">
                                 S'inscrire
