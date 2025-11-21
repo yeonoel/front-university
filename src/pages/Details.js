@@ -83,13 +83,6 @@ const DetailsContainer = styled.div`
 `;
 
 
-
-
-
-
-
-
-
 // 🖼️ Conteneur d’images (layout desktop)
 const ImageGallery = styled.div`
   display: grid;
@@ -106,25 +99,24 @@ const ImageGallery = styled.div`
 `;
 
 const StyledTitle = styled.div`
-  border-bottom: 1px dashed ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};;
+  border-bottom: 1px dashed ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};;
   margin-bottom: 20px;
-  position: sticky;
-  top: 50px;
-  background: ${({isDarkMode}) => isDarkMode ? "" : colors.backgroundLight};
+  background: ${({ isDarkMode }) => isDarkMode ? "" : colors.backgroundLight};
   display: flex;
   justify-content: space-between;
   align-self: flex-start;
   width: 100%;
   max-width: 1000px;
   margin: auto;
-  padding: 30px 20px;
+  padding: 20px;
   align-items: center;
-    color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
+  color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
 
   .nameNote {
-    width: 70%;
     display: flex;
     align-items: center;
+      height: 150px;
+
     div {
       margin-left: 20px;
       h2 {
@@ -132,16 +124,13 @@ const StyledTitle = styled.div`
         font-size: 1rem;
       }
     }
-    
   }
 
-   
-      @media (max-width: 768px) {
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 10px;
+
+  @media (max-width: 768px) {
+        gap: 5px;
         .nameNote {
-          width: 50%;      
+          width: 70%;      
           h2 {
             font-size: 1rem;
           }
@@ -149,20 +138,28 @@ const StyledTitle = styled.div`
               font-size: 1rem;
             }
         }
-        button {
-          font-size: 0.5rem;
-          padding: 0 10px;
+        
+  }
+  @media(max-width: 480px) {
+        gap: 5px;
+        flex-direction: column;
+        .nameNote {
+          width: 100%;      
+          h2 {
+            font-size: 0.6rem;
+          }
+            p {
+              font-size: 0.6rem;
+            }
         }
-      }
-
-
-
-      
+        
+  }
+     
 }`;
 
 const ContentImages = styled.div`
   width: 100%;
-    background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
+    background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
 `;
 
 // Grande image à gauche
@@ -412,29 +409,29 @@ const MiniMap = styled.div`
 
 function Details() {
   const { id } = useParams();
-  const {theme} = useTheme();
-  
+  const { theme } = useTheme();
+
   const [currentIndex, setCurrentIndex] = useState(0);
-   // est-ce que la modal est ouverte ?
+  // est-ce que la modal est ouverte ?
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {datas, isLoading, error} = useFetch(base_url_local+'school/detail-university/'+id);
+  const { datas, isLoading, error } = useFetch(base_url_local + 'school/detail-university/' + id);
 
-    console.log("DATTAS de l'école :", datas);
+  console.log("DATTAS de l'école :", datas);
 
   if (!datas) {
-    return <div style={{marginTop: "200px", textAlign: "center"}}>École non trouvée</div>;
+    return <div style={{ marginTop: "200px", textAlign: "center" }}>École non trouvée</div>;
   }
 
   if (error) {
     return <span>Oups il y a eu un problème</span>;
   }
 
-  const {reviews} = datas || [];
+  const { reviews } = datas || [];
 
 
   // ⚙️ Exemple d’images
-  
+
   const imagesUrls = datas?.images || [];
   const images = imagesUrls.length ? imagesUrls.map(img => img.url) : [datas.logo];
 
@@ -443,17 +440,15 @@ function Details() {
 
   // 🎠 Slider mobile state
 
-  const nextImage = () =>
-   {
-     if(images.length < 0) return;
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-   }
+  const nextImage = () => {
+    if (images.length < 0) return;
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  }
 
-  const prevImage = () =>
-   {
-     if(images.length < 0) return;
-      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-   }
+  const prevImage = () => {
+    if (images.length < 0) return;
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  }
 
 
 
@@ -468,23 +463,23 @@ function Details() {
   };
 
   const openMap = () => {
-  if (!datas.latitude || !datas.longitude) return;
+    if (!datas.latitude || !datas.longitude) return;
 
-  const lat = datas.latitude;
-  const lng = datas.longitude;
+    const lat = datas.latitude;
+    const lng = datas.longitude;
 
-  // Ouvre Google Maps avec itinéraire depuis l'emplacement actuel
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-  window.open(url, "_blank");
-};
+    // Ouvre Google Maps avec itinéraire depuis l'emplacement actuel
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <PageWrapper>
       <ContainerBloc>
-        <FiliereContainer isDarkMode={theme ==="dark"}>
+        <FiliereContainer isDarkMode={theme === "dark"}>
           <h1>Filières</h1>
           <FiliereName>
-            { datas.filieres &&
+            {datas.filieres &&
               datas.filieres.map((filiere, index) => (
                 <button key={index} type="button"> {filiere.name}</button>
               ))
@@ -516,24 +511,30 @@ function Details() {
           </LocationContainerWrapper>
         )}
       </ContainerBloc>
-        
-        <DetailsContainer isDarkMode={theme ==="dark"}>
+
+      <DetailsContainer isDarkMode={theme === "dark"}>
 
         {/* 🖼️ Version Desktop */}
-        <ContentImages isDarkMode={theme ==="dark"}>
-          <StyledTitle isDarkMode={theme ==="dark"}>
-            <div className="nameNote"> 
-              <img src={datas.logo} className="h-16 w-16" alt="logo" /> 
+        <ContentImages isDarkMode={theme === "dark"}>
+          <StyledTitle isDarkMode={theme === "dark"}>
+            <div className="nameNote">
+              <img src={datas.logo} className="h-16 w-16" alt="logo" />
               <div>
                 <h2>{datas.name}</h2>
                 <p> {formatRatingDisplay(datas)} </p>
               </div>
             </div>
-              <ButtonAvis 
-                setIsModalOpen={setIsModalOpen}
-              />
+            {reviews &&
+              reviews.length > 0 && (
+                <div className="btnAvis">
+                  <ButtonAvis
+                    setIsModalOpen={setIsModalOpen}
+                  />
+                </div>
+              )
+            }
           </StyledTitle>
-            <ImageGallery>
+          <ImageGallery>
             {images[0] && <MainImage src={images[0]} alt="principale" />}
             <SideImages>
               {images[1] && <img src={images[1]} alt="secondaire 1" />}
@@ -549,43 +550,43 @@ function Details() {
           <SliderArrow onClick={nextImage}>→</SliderArrow>
         </MobileSlider>
 
-        { 
+        {
           isLoading ? (
             <Loader />
           ) : reviews.length === 0 ? (
             <div className="flex flex-col items-center justify-center line-hei">
-                <span>Soyez le premier à ajouter donner votre avis! </span>
-                <div>
-                  <ButtonAvis 
-                    setIsModalOpen={setIsModalOpen}
-                  />
-                </div>
-                
+              <span>Soyez le premier à ajouter donner votre avis! </span>
+              <div>
+                <ButtonAvis
+                  setIsModalOpen={setIsModalOpen}
+                />
+              </div>
+
             </div>
-          ): (
-                reviews.length > 0 &&
-                  <BodyDetail>
-                    {/* 📊 Synthèse des notes */}
-                    <NoteContainer>
-                      <Synthese logo={openBook} note={coursTheoriques.outOfFive } label="Cours théoriques" />
-                      <Synthese logo={building} note={coursPratiques.outOfFive} label="Cours pratiques" />
-                      <Synthese logo={users} note={cadreEtudiant.outOfFive} label="Cadre étudiant" />
-                      <Synthese logo={wallet} note={fraisScolaire.outOfFive} label="Frais scolaire" />
-                    </NoteContainer>
+          ) : (
+            reviews.length > 0 &&
+            <BodyDetail>
+              {/* 📊 Synthèse des notes */}
+              <NoteContainer>
+                <Synthese logo={openBook} note={coursTheoriques.outOfFive} label="Cours théoriques" />
+                <Synthese logo={building} note={coursPratiques.outOfFive} label="Cours pratiques" />
+                <Synthese logo={users} note={cadreEtudiant.outOfFive} label="Cadre étudiant" />
+                <Synthese logo={wallet} note={fraisScolaire.outOfFive} label="Frais scolaire" />
+              </NoteContainer>
 
-                    <ToggleComment/>
+              <ToggleComment />
 
-                    <CommentContainer>
-                      <div>
-                        { 
-                          reviews.map((review, index) => (
-                            <Comment key={index} review={review} />
-                          ))
-                        }
-                      </div>
-                    </CommentContainer>
-                  </BodyDetail>
-                )
+              <CommentContainer>
+                <div>
+                  {
+                    reviews.map((review, index) => (
+                      <Comment key={index} review={review} />
+                    ))
+                  }
+                </div>
+              </CommentContainer>
+            </BodyDetail>
+          )
         }
 
         <Modal
@@ -594,8 +595,8 @@ function Details() {
           onSubmit={handleFormSubmit}
           schoolId={id}
         />
-        </DetailsContainer>
-        
+      </DetailsContainer>
+
     </PageWrapper>
   );
 }

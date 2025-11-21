@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { useTheme } from '../../utils/hooks';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone, BookOpen, Star } from 'lucide-react';
+import { Mail, MapPin, Phone, BookOpen } from 'lucide-react';
 import { colors } from '../../utils/styles/colors';
 import AnimatedCard from '../AnimatedCard/AnimatedCard';
 
 const FooterContainer = styled.footer`
-  background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
-  color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
+  background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
+  color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
   padding: 60px 20px 30px;
   margin-top: 80px;
   box-shadow: 8px 2px 0px rgba(0, 0, 0, 0.1);
@@ -28,6 +28,9 @@ const FooterContent = styled.div`
     grid-template-columns: 1fr;
     gap: 30px;
   }
+    @media (max-width: 487px) {
+      display: none;
+    }
 `;
 
 const FooterSection = styled.div`
@@ -144,103 +147,95 @@ function Footer() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    
+
     <AnimatedCard >
       <FooterContainer isDarkMode={theme === 'dark'}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Contenu principal */}
-        <FooterContent>
-          {/* À propos */}
-          <FooterSection>
-            <Logo>🎓 EducInfo CI</Logo>
-            <FooterText>
-              La première plateforme de notation et de recherche d'établissements scolaires en Côte d'Ivoire. 
-              Trouve l'école parfaite selon tes critères et les avis réels des étudiants.
-            </FooterText>
-          </FooterSection>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {/* Contenu principal */}
+          <FooterContent>
+            {/* À propos */}
+            <FooterSection>
+              <Logo>🎓 EducInfo CI</Logo>
+              <FooterText>
+                La première plateforme d’avis et de recherche d’écoles numériques en Côte d’Ivoire.
+                Trouvez l’école idéale selon vos critères et les avis réels des étudiants.
+              </FooterText>
+            </FooterSection>
 
-          {/* Navigation rapide */}
-          <FooterSection>
-            <FooterTitle>
-              <BookOpen size={20} />
-              Navigation
-            </FooterTitle>
-            <FooterList>
-              <FooterListItem>
-                <FooterLink to="/">🏠 Accueil</FooterLink>
-              </FooterListItem>
-              <FooterListItem>
-                <FooterLink to="/schools">🏫 Toutes les écoles</FooterLink>
-              </FooterListItem>
-              <FooterListItem>
-                <FooterLink to="/filieres">📚 Filières</FooterLink>
-              </FooterListItem>
-              <FooterListItem>
-                <FooterLink to="/top-rated">⭐ Meilleures écoles</FooterLink>
-              </FooterListItem>
-            </FooterList>
-          </FooterSection>
+            {/* Navigation rapide */}
+            <FooterSection>
+              <FooterTitle>
+                <BookOpen size={20} />
+                Navigation
+              </FooterTitle>
+              <FooterList>
+                <FooterListItem>
+                  <FooterLink to="/">🏠 Accueil</FooterLink>
+                </FooterListItem>
+                <FooterListItem>
+                  <FooterLink to="/Accueil">🏫 Toutes les écoles</FooterLink>
+                </FooterListItem>
+                <FooterListItem>
+                  <FooterLink to="#"
+                    onClick={(e) => e.preventDefault()}
+                    style={{ pointerEvents: "none", opacity: 0.5 }}>
+                    📚 Filières</FooterLink>
+                </FooterListItem>
+                <FooterListItem>
+                  <FooterLink to="#"
+                    onClick={(e) => e.preventDefault()}
+                    style={{ pointerEvents: "none", opacity: 0.5 }}>
+                    ⭐ Meilleures écoles</FooterLink>
+                </FooterListItem>
+              </FooterList>
+            </FooterSection>
 
-          {/* Ressources */}
-          <FooterSection>
-            <FooterTitle>
-              <Star size={20} />
-              Ressources
-            </FooterTitle>
-            <FooterList>
-              <FooterListItem>
-                <FooterLink to="/faq">❓ FAQ</FooterLink>
-              </FooterListItem>
-              <FooterListItem>
-                <FooterLink to="/contact">📧 Nous contacter</FooterLink>
-              </FooterListItem>
-            </FooterList>
-          </FooterSection>
 
-          {/* Contact */}
-          <FooterSection>
-            <FooterTitle>
-              <Mail size={20} />
-              Contact
-            </FooterTitle>
-            <ContactItem>
-              <MapPin size={18} />
-              <span>Abidjan, Cocody<br />Côte d'Ivoire</span>
-            </ContactItem>
-            <ContactItem>
-              <Phone size={18} />
-              <span>+225 07 47 49 21 56</span>
-            </ContactItem>
-            <ContactItem>
-              <Mail size={18} />
-              <span>
-                <FooterLink to="https://www.linkedin.com/in/l%C3%A9on-indie-371157383/" target="_blank" rel="noopener noreferrer">Léon Indie</FooterLink>
-              </span>
-            </ContactItem>
-          </FooterSection>
-        </FooterContent>
 
-        {/* Bas du footer */}
-        <FooterBottom>
-          <Copyright>
-            © {new Date().getFullYear()} TechCampus  Tous droits réservés. 
-            <span style={{ margin: '0 10px' }}>•</span>
-            <FooterLink to="/privacy" style={{ display: 'inline', color: '#94a3b8' }}>
-              Confidentialité
-            </FooterLink>
-            <span style={{ margin: '0 10px' }}>•</span>
-            <FooterLink to="/terms" style={{ display: 'inline', color: '#94a3b8' }}>
-              Conditions d'utilisation
-            </FooterLink>
-          </Copyright>
-          
-          <NightModeButton onClick={() => toggleTheme()}>
-            {theme === 'light' ? '🌙' : '☀️'}
-            <span>Mode {theme === 'light' ? 'sombre' : 'clair'}</span>
-          </NightModeButton>
-        </FooterBottom>
-      </div>
-    </FooterContainer>
+            {/* Contact */}
+            <FooterSection>
+              <FooterTitle>
+                <Mail size={20} />
+                Contact
+              </FooterTitle>
+              <ContactItem>
+                <MapPin size={18} />
+                <span>Abidjan, Cocody<br />Côte d'Ivoire</span>
+              </ContactItem>
+              <ContactItem>
+                <Phone size={18} />
+                <span>+225 07 47 49 21 56</span>
+              </ContactItem>
+              <ContactItem>
+                <Mail size={18} />
+                <span>
+                  <FooterLink to="https://www.linkedin.com/in/l%C3%A9on-indie-371157383/" target="_blank" rel="noopener noreferrer">Léon Indie</FooterLink>
+                </span>
+              </ContactItem>
+            </FooterSection>
+          </FooterContent>
+
+          {/* Bas du footer */}
+          <FooterBottom>
+            <Copyright>
+              © {new Date().getFullYear()} TechCampus  Tous droits réservés.
+              <span style={{ margin: '0 10px' }}>•</span>
+              <FooterLink to="/privacy" style={{ display: 'inline', color: '#94a3b8' }}>
+                Confidentialité
+              </FooterLink>
+              <span style={{ margin: '0 10px' }}>•</span>
+              <FooterLink to="/terms" style={{ display: 'inline', color: '#94a3b8' }}>
+                Conditions d'utilisation
+              </FooterLink>
+            </Copyright>
+
+            <NightModeButton onClick={() => toggleTheme()}>
+              {theme === 'light' ? '🌙' : '☀️'}
+              <span>Mode {theme === 'light' ? 'sombre' : 'clair'}</span>
+            </NightModeButton>
+          </FooterBottom>
+        </div>
+      </FooterContainer>
     </AnimatedCard>
 
   );

@@ -3,11 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/hooks";
 import avatar_user_connected from "../../assets/avatar_user_connected.jpg";
-
 import { colors } from "../../utils/styles/colors";
 import DropdownUser from "../DropdownUser";
-
-
 
 const ConnexionButton = styled.button`
   padding: 0.5rem 1.25rem;
@@ -17,7 +14,6 @@ const ConnexionButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
-
   background: ${colors.primaryGradient};
   color: ${colors.white};
 
@@ -30,6 +26,10 @@ const ConnexionButton = styled.button`
     padding: 0.4rem 1rem;
   }
 
+  @media (max-width: 480px) {
+    font-size: 0.875rem;
+    padding: 0.2rem .8rem;
+  }
 
 `;
 
@@ -60,7 +60,33 @@ const UserAvatar = styled.img`
   }
 `;
 
+const Nav = styled.nav`
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
 
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
+`;
+
+// Nouveaux styles pour mobile
+const MobileControls = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 2000;
+  }
+`;
+
+const DesktopNav = styled(Nav)`
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
 
 function ConnexionDeconnexion() {
   const [opendropdownUser, setOpenDropdownUser] = useState(false);
@@ -75,43 +101,55 @@ function ConnexionDeconnexion() {
     setOpenDropdownUser(!opendropdownUser);
   };
 
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (avatarRef.current && !avatarRef.current.contains(event.target)) {
         setOpenDropdownUser(false);
       }
-    }
+    };
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [opendropdownUser]);
 
+
+
   return (
     <>
-     
+      {/* Navigation Desktop */}
+      <DesktopNav>
         {isAuthenticated ? (
-          <UserAvatarContainer ref={avatarRef}
-            onClick={handleDropdownUser}
-          >
-            <UserAvatar 
-              src={avatar_user_connected}
-              alt="Avatar utilisateur" 
-            />
+          <UserAvatarContainer ref={avatarRef} onClick={handleDropdownUser}>
+            <UserAvatar src={avatar_user_connected} alt="Avatar utilisateur" />
           </UserAvatarContainer>
         ) : (
-          <ConnexionButton 
-            onClick={handleConnexionPage}
-          >
+          <ConnexionButton onClick={handleConnexionPage}>
+            Se connecter
+          </ConnexionButton>
+        )}
+      </DesktopNav>
+
+      {/* Contrôles Mobile */}
+      <MobileControls>
+        {isAuthenticated ? (
+          <UserAvatarContainer ref={avatarRef} onClick={handleDropdownUser}>
+            <UserAvatar src={avatar_user_connected} alt="Avatar utilisateur" />
+          </UserAvatarContainer>
+        ) : (
+          <ConnexionButton onClick={handleConnexionPage}>
             Se connecter
           </ConnexionButton>
         )}
 
-        <DropdownUser
-            opendropdownUser={opendropdownUser}
-            setOpenDropdownUser={setOpenDropdownUser}
-      />
+      </MobileControls>
 
+      {/* Dropdown User */}
+      <DropdownUser
+        opendropdownUser={opendropdownUser}
+        setOpenDropdownUser={setOpenDropdownUser}
+      />
     </>
   );
 }

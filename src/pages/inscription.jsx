@@ -1,4 +1,4 @@
-import {  useState } from 'react';
+import { useState } from 'react';
 import videoInscription from '../assets/videos/videoInscription.mp4';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, useMutation } from '../utils/hooks';
@@ -13,8 +13,8 @@ export default function Inscription() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-    const {mutate} = useMutation();
-    const {login} = useAuth();
+    const { mutate } = useMutation();
+    const { login } = useAuth();
 
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ export default function Inscription() {
         setError('');
 
         try {
-            const data = await mutate(base_url_local + "auth/signup", {body: formData});
+            const data = await mutate(base_url_local + "auth/signup", { body: formData });
             if (data.status === "success") {
                 setMessage('Inscription réussie ! 🎉');
                 setFormData({ username: '', email: '', password: '' });
@@ -47,18 +47,18 @@ export default function Inscription() {
             setError(err.message);
         } finally {
             setLoading(false);
-        } 
+        }
     };
 
     return (
-        <div className="min-h-screen w-full flex">
+        <div className="min-h-screen w-full flex flex-col lg:flex-row items-center lg:items-stretch justify-center lg:justify-normal">
             {/* Section gauche avec vidéo 3D */}
-            <div className="w-1/2 relative overflow-hidden bg-black">
+            <div className="hidden lg:block w-full md:w-1/2 relative overflow-hidden bg-black">
                 {/* Vidéo en background */}
-                <video 
-                    autoPlay 
-                    loop 
-                    muted 
+                <video
+                    autoPlay
+                    loop
+                    muted
                     playsInline
                     className="absolute top-0 left-0 w-full h-full object-cover opacity-70"
                 >
@@ -91,7 +91,7 @@ export default function Inscription() {
             </div>
 
             {/* Section droite avec formulaire */}
-            <div className="w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+            <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-8">
                 <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
                     <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
                         Inscription

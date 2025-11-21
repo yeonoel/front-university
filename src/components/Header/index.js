@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../utils/hooks";
-import { Shield } from "lucide-react";
+import { Shield, ArrowLeft } from "lucide-react";
 import { colors } from "../../utils/styles/colors";
 import ConnexionDeconnexion from "../connexionDeconnexion.jsx";
 
@@ -12,14 +12,12 @@ const StyledHeader = styled.header`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1999;
   padding: 10px 100px;
-  background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
+  background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
 
   @media (max-width: 768px) {
     padding: 10px 20px;
-    bottom: 0;
-    top: auto;
   }
 `;
 
@@ -29,12 +27,38 @@ const TopRow = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  margin-bottom: 15px;
+  z-index: 1999;
 
   @media (max-width: 768px) {
-    flex-direction: column;
-    margin-bottom: 0;
     gap: 10px;
+  }
+`;
+
+const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const BackButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(-2px);
+  }
+
+  &:active {
+    transform: translateX(0);
   }
 `;
 
@@ -47,41 +71,58 @@ const StyledSpan = styled.span`
   gap: 10px;
   white-space: nowrap;
   cursor: pointer;
-  color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
+  color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
 
   @media (max-width: 768px) {
     font-size: 18px;
   }
+  
+  span {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
 `;
 
-
-
-
-
-function Nav() {
-  const {theme} = useTheme();
+function Header() {
+  const { theme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation(); // 🔑 Hook pour connaître la page actuelle
+
   const handleHomePage = () => navigate("/");
+  const handleGoBack = () => navigate(-1); // Revenir à la page précédente
 
-
+  // Vérifier si on est sur la page d'accueil
+  const isHomePage = location.pathname === "/";
 
   return (
     <StyledHeader isDarkMode={theme === "dark"}>
       <TopRow>
-        <StyledSpan isDarkMode={theme === "dark"} onClick={handleHomePage}>
+        <LeftSection>
+          {/* Afficher la flèche UNIQUEMENT si on n'est PAS sur la page d'accueil */}
+          {!isHomePage && (
+            <BackButton
+              isDarkMode={theme === "dark"}
+              onClick={handleGoBack}
+              aria-label="Retour"
+            >
+              <ArrowLeft size={24} />
+            </BackButton>
+          )}
+
+          {/* Le logo reste toujours visible */}
+          <StyledSpan isDarkMode={theme === "dark"} onClick={handleHomePage}>
             <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
-          TechCampus
-        </StyledSpan>
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <span>TechCampus</span>
+          </StyledSpan>
+        </LeftSection>
 
-          <ConnexionDeconnexion /> 
-
+        <ConnexionDeconnexion />
       </TopRow>
-
-      
     </StyledHeader>
   );
 }
 
-export default Nav;
+export default Header;

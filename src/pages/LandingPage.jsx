@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Search, Code, Shield, Video, Star, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import { Search, Code, Shield, Video, MapPin } from 'lucide-react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import ConnexionDeconnexion from '../components/connexionDeconnexion.jsx';
 import { colors } from '../utils/styles/colors.js';
+import Header from '../components/Header/index.js';
 
 const Container = styled.div`
   min-height: 100vh;
@@ -12,72 +12,10 @@ const Container = styled.div`
   background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #faf5ff 100%);
 `;
 
-const Header = styled.header`
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  @media (max-width: 768px) {
-    padding: 1rem;
-    flex-direction: column;
-    gap: 1rem;
-  }
-`;
 
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
 
-const LogoIcon = styled.div`
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
-const LogoText = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    gap: 1rem;
-  }
-`;
-
-const NavButton = styled.button`
-  color: #374151;
-  font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &:hover {
-    color: #4f46e5;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-  }
-`;
 
 
 
@@ -115,10 +53,15 @@ const Title = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 0.75rem;
+  margin: 0 auto 0.75rem auto;
 
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+    width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
   }
 `;
 
@@ -127,7 +70,7 @@ const Subtitle = styled.p`
   color: #6b7280;
 
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: .8rem;
   }
 `;
 
@@ -137,6 +80,7 @@ const SearchCard = styled.div`
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
   padding: 2rem;
   margin-bottom: 2rem;
+  width: 90%;
 
   @media (max-width: 768px) {
     padding: 1.5rem;
@@ -233,9 +177,15 @@ const StartButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    width: 100%;
-    padding: 0.75rem 1.5rem;
+    width: 50%;
+    padding: 0.875rem 1.5rem;
     font-size: 0.875rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    width: 90%;
   }
 `
 
@@ -248,6 +198,9 @@ const Categories = styled.div`
   @media (max-width: 768px) {
     margin-top: 0.5rem;
   }
+    @media (max-width: 480px) {
+      display: none;
+    }
 `;
 
 const CategoryLabel = styled.span`
@@ -277,50 +230,14 @@ const CategoryButton = styled.button`
   &:hover {
     background: #e5e7eb;
   }
-`;
-
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    
   }
+    
 `;
 
-const StatCard = styled.div`
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  text-align: center;
 
-  @media (max-width: 768px) {
-    padding: 1.25rem;
-  }
-`;
-
-const StatValue = styled.div`
-  font-size: 2rem;
-  font-weight: 700;
-  color: ${props => props.$color || '#4f46e5'};
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-
-  @media (max-width: 768px) {
-    font-size: 1.75rem;
-  }
-`;
-
-const StatLabel = styled.div`
-  color: #6b7280;
-  font-size: 0.875rem;
-`;
 
 const Footer = styled.footer`
   background: white;
@@ -370,7 +287,7 @@ function LandingPage() {
   ];
 
   const handleSearch = async () => {
-    if (filiere.length  > 50 || commune.length  > 50 ) return;
+    if (filiere.length > 50 || commune.length > 50) return;
 
     const query = new URLSearchParams({ filiere, commune }).toString();
     navigate(`Accueil/search?${query}`);
@@ -383,19 +300,7 @@ function LandingPage() {
 
   return (
     <Container>
-      <Header>
-        <Logo>
-          <LogoIcon>
-            <Code size={20} color="white" />
-          </LogoIcon>
-          <LogoText>TechCampus</LogoText>
-        </Logo>
-        <Nav>
-          <NavButton>Écoles</NavButton>
-          <NavButton>Comparateur</NavButton>
-          <ConnexionDeconnexion />
-        </Nav>
-      </Header>
+      <Header />
 
       <Main>
         <Content>
@@ -449,7 +354,7 @@ function LandingPage() {
           </TitleSection>
 
           <StartButton onClick={() => navigate('/Accueil')}>
-                Commencer
+            Commencer
           </StartButton>
 
         </Content>

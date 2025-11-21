@@ -84,7 +84,7 @@ function Modal({ isOpen, onClose, schoolId }) {
 
   const [formData, setFormData] = useState({
     userId: "",
-    schoolId: schoolId ,
+    schoolId: schoolId,
     comment: "",
     reviewScores: [
       { criteriaId: 1, value: "" },
@@ -136,8 +136,8 @@ function Modal({ isOpen, onClose, schoolId }) {
     if (response.status === "success") {
       setMessage(response.message);
       setTimeout(() => {
-              onClose();
-      } , 1000);
+        onClose();
+      }, 1000);
       // Réinitialisation du formulaire
       setFormData({
         userId: userId,
@@ -174,14 +174,13 @@ function Modal({ isOpen, onClose, schoolId }) {
                       onClick={() =>
                         handleSelectScore(criteria.criteriaId, option)
                       }
-                      className={`px-4 py-2 rounded-xl border-2 transition-all text-sm ${
-                        getScoreColor(
-                          option,
-                          formData.reviewScores.find(
-                            (s) => s.criteriaId === criteria.criteriaId
-                          )?.value === option
-                        )
-                      }`}
+                      className={`px-4 py-2 rounded-xl border-2 transition-all text-sm ${getScoreColor(
+                        option,
+                        formData.reviewScores.find(
+                          (s) => s.criteriaId === criteria.criteriaId
+                        )?.value === option
+                      )
+                        }`}
                     >
                       <div className="text-lg mb-1">
                         {getScoreEmoji(option)}
@@ -224,11 +223,10 @@ function Modal({ isOpen, onClose, schoolId }) {
             type="button"
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className={`w-full py-3 rounded-xl font-semibold transition-all ${
-              canSubmit
+            className={`w-full py-3 rounded-xl font-semibold transition-all ${canSubmit
                 ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-xl"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
-            }`}
+              }`}
           >
             <CheckCircle size={18} className="inline-block mr-2" />
             Publier mon avis

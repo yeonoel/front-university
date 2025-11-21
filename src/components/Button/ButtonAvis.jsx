@@ -2,9 +2,12 @@ import styled from "styled-components";
 
 // ✨ Style du bouton
 const StyledButton = styled.button`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
       border: 0;
-      line-height: 2.5;
-      padding: 0 10px;
+      padding:  10px;
       font-size: 1rem;
       text-align: center;
       color: white;
@@ -17,6 +20,8 @@ const StyledButton = styled.button`
         rgb(0 0 0 / 0.2) 30%,
         transparent
       );
+
+       
       box-shadow:
         inset 2px 2px 3px rgb(255 255 255 / 0.6),
         inset -2px -2px 3px rgb(0 0 0 / 0.6);
@@ -36,14 +41,14 @@ const StyledButton = styled.button`
 // 🎯 Le composant Button
 function ButtonAvis({ setIsModalOpen }) {
 
-    const handleOpenModal = () => {
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
-  
+
   return (
-   <StyledButton type="button" onClick={handleOpenModal}>
+    <StyledButton type="button" onClick={handleOpenModal}>
       Ajouter un avis
-   </StyledButton>
+    </StyledButton>
   );
 }
 

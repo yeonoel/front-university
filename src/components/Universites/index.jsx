@@ -24,7 +24,7 @@ const StyledUniversitescontenair = styled.div`
       width: 100%;
       border-radius: 10px;
       padding: 10px;
-      color: ${({isDarkMode}) => isDarkMode ? colors.textPrimary : colors.textSecondary};
+      color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
 
     }
   }
@@ -61,12 +61,15 @@ const StylesdCard = styled.div`
 const RechercherContainer = styled.div`
   display: flex;
   justify-content: center;
-  background: ${({isDarkMode}) => isDarkMode ? "" : colors.backgroundLight};
   margin-bottom: 30px;
   position: sticky;
-  top: -20px;
+  top: -30px;
   padding: 40px;
-  z-index: 9999;
+  z-index: 1000;
+  @media (max-width: 768px) {
+     top: -25px;
+
+  }
 `;
 
 
@@ -89,7 +92,7 @@ function Universites() {
   }, [filiere, commune, query, search]);
 
 
-  if(error) {
+  if (error) {
     return <span>Oups il y a eu un problème</span>;
   }
 
@@ -98,12 +101,12 @@ function Universites() {
       <RechercherContainer isDarkMode={theme === 'dark'}>
         <Rechercher />
       </RechercherContainer>
-        {
-          !isLoading ? (
-            <div>
-              {
-                datas && (
-                  <div>
+      {
+        !isLoading ? (
+          <div>
+            {
+              datas && (
+                <div>
                   <div className="containerH3">
                     <h3 className="nombreDecoles"> {datas.length} ecoles trouvées</h3>
                   </div>
@@ -125,13 +128,13 @@ function Universites() {
                     ))}
                   </StylesdCard>
                 </div>
-                )
-              }
-            </div>
-          ) : (
-            <Loader />  
-          )
-        }
+              )
+            }
+          </div>
+        ) : (
+          <Loader />
+        )
+      }
     </StyledUniversitescontenair>
   );
 }
