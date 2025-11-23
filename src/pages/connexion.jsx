@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, useMutation, useTheme } from '../utils/hooks';
-import { base_url_local } from '../utils/api';
+import API_URL from '../config';
 
 function Connexion() {
     const [formData, setFormData] = useState({
@@ -11,10 +11,10 @@ function Connexion() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
-    const {login} = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
-    const {mutate} = useMutation();
-    const {theme} = useTheme();
+    const { mutate } = useMutation();
+    const { theme } = useTheme();
     const isDarkMode = theme === 'dark';
 
     const handleChange = (e) => {
@@ -26,7 +26,7 @@ function Connexion() {
     };
 
     const handleKeyDown = (e) => {
-        if (formData.emailOrUsername.length  > 50 || formData.password.length  > 50 ) return;
+        if (formData.emailOrUsername.length > 50 || formData.password.length > 50) return;
         if (e.key === 'Enter') {
             handleSubmit(e);
         }
@@ -39,8 +39,8 @@ function Connexion() {
         setError('');
 
         try {
-            const data = await mutate(base_url_local + "auth/signin", {body: formData});
-           
+            const data = await mutate(API_URL + "auth/signin", { body: formData });
+
             if (data.status === "success") {
                 setMessage('Inscription réussie ! 🎉');
                 setFormData({ emailOrUsername: '', password: '' });
@@ -58,7 +58,7 @@ function Connexion() {
 
     return (
         <div className="min-h-screen bg-gray flex justify-center">
-            
+
             {/* Section principalee */}
             <div className=" flex  items-center w-96 justify-center">
                 <div className={`w-full rounded-2xl p-8 border ${isDarkMode ? 'border-white' : 'border-gray'}`}>
@@ -69,7 +69,7 @@ function Connexion() {
                         Connexion
                     </h2>
                     <p className="text-gray-500 text-center mb-8">
-                        
+
                     </p>
 
                     <div className="space-y-5">

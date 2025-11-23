@@ -4,7 +4,7 @@ import { CheckCircle } from 'lucide-react';
 import { getScoreColor } from "../../utils/styles/colors";
 import { getScoreEmoji } from "../../utils/styles/Emoji";
 import { useMutation } from "../../utils/hooks";
-import { base_url_local } from "../../utils/api";
+import API_URL from "../../config";
 
 // ✨ Le fond sombre derrière la modal
 const ModalOverlay = styled.div`
@@ -125,7 +125,7 @@ function Modal({ isOpen, onClose, schoolId }) {
 
     const token = localStorage.getItem("token");
 
-    const response = await mutate(base_url_local + "review/new-review", {
+    const response = await mutate(API_URL + "review/new-review", {
       body: formData,
       headers: {
         "Content-Type": "application/json",
@@ -224,8 +224,8 @@ function Modal({ isOpen, onClose, schoolId }) {
             onClick={handleSubmit}
             disabled={!canSubmit}
             className={`w-full py-3 rounded-xl font-semibold transition-all ${canSubmit
-                ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-xl"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-xl"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
           >
             <CheckCircle size={18} className="inline-block mr-2" />

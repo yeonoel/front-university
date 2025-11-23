@@ -2,7 +2,7 @@ import { useState } from 'react';
 import videoInscription from '../assets/videos/videoInscription.mp4';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, useMutation } from '../utils/hooks';
-import { base_url_local } from '../utils/api';
+import API_URL from '../config';
 
 export default function Inscription() {
     const [formData, setFormData] = useState({
@@ -33,7 +33,7 @@ export default function Inscription() {
         setError('');
 
         try {
-            const data = await mutate(base_url_local + "auth/signup", { body: formData });
+            const data = await mutate(API_URL + "auth/signup", { body: formData });
             if (data.status === "success") {
                 setMessage('Inscription réussie ! 🎉');
                 setFormData({ username: '', email: '', password: '' });

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Cards from "../cards";
-import { base_url_local } from "../../utils/api";
 import { Loader } from "../../utils/styles/Atom";
 import { useSearch, useTheme } from "../../utils/hooks";
 import { colors } from "../../utils/styles/colors";
@@ -8,6 +7,7 @@ import Rechercher from "../rechercher";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import AnimatedCard from "../AnimatedCard/AnimatedCard";
+import API_URL from "../../config";
 
 const StyledUniversitescontenair = styled.div`
   margin: 50px 100px 50px 100px;
@@ -65,7 +65,7 @@ const RechercherContainer = styled.div`
   position: sticky;
   top: -30px;
   padding: 40px;
-  z-index: 1000;
+  z-index: 2000;
   @media (max-width: 768px) {
      top: -25px;
 
@@ -85,10 +85,15 @@ function Universites() {
 
 
   const { data: datas, isLoading, error, search } = useSearch();
+  console.log("tressss", datas);
 
   // Appeler la recherche uniquement quand filiere/commune changent
   useEffect(() => {
-    search(`${base_url_local}school/search`, { filiere, commune, query });
+    console.log("rezzzz", API_URL)
+    search(`${API_URL}school/search`, { filiere, commune, query });
+    console.log("qaaaaaaaaa", API_URL)
+    console.log("gayyayayaay", `${API_URL}school/search`)
+
   }, [filiere, commune, query, search]);
 
 

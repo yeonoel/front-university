@@ -16,7 +16,7 @@ const StyleGlobalstyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background: ${({isDarkMode}) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
+    background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLight};
   }
 
   /* Scrollbar personnalisée */
@@ -60,7 +60,7 @@ const StyleGlobalstyle = createGlobalStyle`
 // ========== ANIMATIONS ==========
 
 function GlobalStyle() {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   return <StyleGlobalstyle isDarkMode={theme === 'dark'} />;
 }
 

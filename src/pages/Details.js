@@ -10,7 +10,6 @@ import { formatRatingDisplay } from "../utils/rating/rating";
 import ToggleComment from "../components/toggleComment";
 import Comment from "../components/comments";
 import Modal from "../components/ModalAvis";
-import { base_url_local } from "../utils/api";
 import { useFetch, useTheme } from "../utils/hooks";
 import { Loader } from "../utils/styles/Atom";
 import { colors } from "../utils/styles/colors";
@@ -21,6 +20,7 @@ import { MapPin } from "lucide-react";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from 'leaflet';
+import API_URL from "../config";
 
 
 const CustomIcon = L.icon({
@@ -415,7 +415,7 @@ function Details() {
   // est-ce que la modal est ouverte ?
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { datas, isLoading, error } = useFetch(base_url_local + 'school/detail-university/' + id);
+  const { datas, isLoading, error } = useFetch(API_URL + 'school/detail-university/' + id);
 
   console.log("DATTAS de l'école :", datas);
 

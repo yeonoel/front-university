@@ -10,7 +10,7 @@ const DropdownOverlay = styled.div`
     width: 100vw;
     top: 0;
     left: 0;
-    z-index: 1998; // ⬅️ En dessous du header (1999)
+    z-index: 2600;
     background-color: transparent;
 `;
 
@@ -23,7 +23,7 @@ const DropdownContainer = styled.div`
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     min-width: 200px;
-    z-index: 2000; // ⬅️ Au-dessus de l'overlay
+    z-index: 2601; // ⬅️ Au-dessus de l'overlay
     overflow: hidden;
 
     @media (max-width: 768px) {

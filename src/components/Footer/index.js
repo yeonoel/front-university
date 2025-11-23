@@ -13,7 +13,7 @@ const FooterContainer = styled.footer`
   box-shadow: 8px 2px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
-  
+  margin-bottom: 0;
 `;
 
 const FooterContent = styled.div`

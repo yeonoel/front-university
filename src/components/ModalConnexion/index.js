@@ -1,13 +1,13 @@
 import { useState } from "react";
 import logo from "../../assets/logo.png";
-import { base_url_local } from "../../utils/api";
 import { useAuth, useMutation } from "../../utils/hooks";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../../config";
 
 function ModalConnexion({ isOpen, setIsOpen }) {
   const [formData, setFormData] = useState({});
-  const {login, isAuthenticated} = useAuth();
-  const {mutate} = useMutation();
+  const { login, isAuthenticated } = useAuth();
+  const { mutate } = useMutation();
 
   const navigate = useNavigate();
   const handleInscrptionPage = () => navigate("/inscription");
@@ -16,35 +16,35 @@ function ModalConnexion({ isOpen, setIsOpen }) {
   if (!isOpen) return null;
 
 
-  
 
-  const formFields =[
-        { type: "text", placeholder: "Nom d'utilisateur", name: "username" },
-        { type: "password", placeholder: "Mot de passe", name: "password" },
-      ]
+
+  const formFields = [
+    { type: "text", placeholder: "Nom d'utilisateur", name: "username" },
+    { type: "password", placeholder: "Mot de passe", name: "password" },
+  ]
   const inputChangeValue = (e) => {
-      const { name, value } = e.target;
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }))
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       let userInfomation = {};
-        userInfomation = mutate(base_url_local + "auth/signup", {body: formData});
-        login(userInfomation.token, userInfomation.user);
-  
+      userInfomation = mutate(API_URL + "auth/signup", { body: formData });
+      login(userInfomation.token, userInfomation.user);
+
     } catch (error) {
       console.error(error);
     }
-  
+
     setIsOpen(false);
   };
 
-  if(isAuthenticated) {
+  if (isAuthenticated) {
     return <div>Vous êtes déja connecté</div>
   }
   const handleCloseModalConnexion = () => {
@@ -91,7 +91,7 @@ function ModalConnexion({ isOpen, setIsOpen }) {
             onClick={handleInscrptionPage}
             className="text-blue-500 cursor-pointer hover:underline"
           >
-           Inscrivez-vous
+            Inscrivez-vous
           </span>
         </p>
       </div>

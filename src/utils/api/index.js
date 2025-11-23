@@ -1,1 +1,0 @@
-export const base_url_local = 'http://localhost:3000/';

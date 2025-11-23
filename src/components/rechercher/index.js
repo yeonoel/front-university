@@ -94,7 +94,7 @@ const MobileSearchOverlay = styled.div`
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 2001;
+    z-index: 2700 ;
     animation: fadeIn 0.3s ease;
 
     @keyframes fadeIn {
@@ -117,7 +117,7 @@ const MobileSearchContainer = styled.div`
     background: white;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 2002;
+    z-index: 2701;
     animation: slideDown 0.3s ease;
 
     @keyframes slideDown {
