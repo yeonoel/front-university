@@ -7,11 +7,11 @@ import { AuthProvider, ThemeProvider } from './utils/context';
 import Details from './pages/Details';
 import './index.css';
 import Inscription from './pages/inscription';
-import MainLayout from './layout/MainLayout';
+import MainLayout from './layout/mainLayout';
 import Connexion from './pages/connexion';
 import LandingPage from './pages/LandingPage';
 import AjouterAvis from './pages/AjouterAvis';
-import PublicRoute from './layout/PublicRoute';
+import PublicRoute from './layout/publicRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
