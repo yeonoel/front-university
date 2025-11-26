@@ -83,8 +83,8 @@ function Modal({ isOpen, onClose, schoolId }) {
   const userId = user?.id || null;
 
   const [formData, setFormData] = useState({
-    userId: "",
-    schoolId: schoolId,
+    userId: Number(userId),
+    schoolId: Number(schoolId),
     comment: "",
     reviewScores: [
       { criteriaId: 1, value: "" },
