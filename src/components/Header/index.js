@@ -60,6 +60,10 @@ const BackButton = styled.button`
   &:active {
     transform: translateX(0);
   }
+
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 const StyledSpan = styled.span`
@@ -106,7 +110,7 @@ function Header() {
               onClick={handleGoBack}
               aria-label="Retour"
             >
-              <ArrowLeft size={24} />
+              <ArrowLeft size={16} />
             </BackButton>
           )}
 

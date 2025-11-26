@@ -72,6 +72,10 @@ const Subtitle = styled.p`
   @media (max-width: 768px) {
     font-size: .8rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: .5rem;
+  }
 `;
 
 const SearchCard = styled.div`
@@ -154,6 +158,10 @@ const SearchButton = styled.button`
     padding: 0.75rem 1.5rem;
     font-size: 0.875rem;
   }
+
+  @media (max-width: 480px) {
+        padding: 0.5rem 1.5rem;
+  }
 `;
 
 
@@ -185,7 +193,7 @@ const StartButton = styled.button`
   }
 
   @media (max-width: 480px) {
-    width: 90%;
+    padding: 0.5rem 1.5rem;
   }
 `
 

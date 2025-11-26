@@ -67,8 +67,11 @@ const RechercherContainer = styled.div`
   padding: 40px;
   z-index: 2000;
   @media (max-width: 768px) {
-     top: -25px;
-
+     top: -30px;
+     margin-left: -50px;
+  }
+     @media (max-width: 480px) {
+     margin-left: -50px;
   }
 `;
 
@@ -85,14 +88,11 @@ function Universites() {
 
 
   const { data: datas, isLoading, error, search } = useSearch();
-  console.log("tressss", datas);
 
   // Appeler la recherche uniquement quand filiere/commune changent
   useEffect(() => {
-    console.log("rezzzz", API_URL)
+    console.log(API_URL)
     search(`${API_URL}school/search`, { filiere, commune, query });
-    console.log("qaaaaaaaaa", API_URL)
-    console.log("gayyayayaay", `${API_URL}school/search`)
 
   }, [filiere, commune, query, search]);
 

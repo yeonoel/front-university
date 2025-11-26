@@ -66,7 +66,7 @@ const MobileSearchTrigger = styled.div`
 
   @media (max-width: 480px) {
     font-size: 0.875rem;
-    padding: 0.2rem .8rem;
+    padding: 0.1rem .8rem;
   }
 `;
 
@@ -78,8 +78,9 @@ const SearchIcon = styled(Search)`
 
 const TriggerText = styled.span`
   color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;  
+  font-size: 10px;
+  font-weight: 400;  
+
   
 `;
 

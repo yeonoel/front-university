@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../../utils/hooks";
 
 // ✨ Style du bouton
 const StyledButton = styled.button`
@@ -40,6 +42,12 @@ const StyledButton = styled.button`
 
 // 🎯 Le composant Button
 function ButtonAvis({ setIsModalOpen }) {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  if (!isAuthenticated) {
+    navigate("/connexion");
+  }
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
