@@ -9,11 +9,17 @@ const FooterContainer = styled.footer`
   background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
   color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
   padding: 60px 20px 30px;
-  margin-top: 80px;
+  margin-top: 230px;
   box-shadow: 8px 2px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
   margin-bottom: 0;
+     @media (max-width: 768px) {
+      margin-top: 80px;
+    }
+    @media (max-width: 487px) {
+      margin-top: 360px;
+    }
 `;
 
 const FooterContent = styled.div`

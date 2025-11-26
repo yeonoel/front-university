@@ -68,11 +68,8 @@ const RechercherContainer = styled.div`
   z-index: 2000;
   @media (max-width: 768px) {
      top: -30px;
-     margin-left: -50px;
   }
-     @media (max-width: 480px) {
-     margin-left: -50px;
-  }
+     
 `;
 
 
@@ -137,7 +134,9 @@ function Universites() {
             }
           </div>
         ) : (
-          <Loader />
+          <div>
+            <Loader />
+          </div>
         )
       }
     </StyledUniversitescontenair>

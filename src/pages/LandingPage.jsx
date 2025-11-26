@@ -74,7 +74,7 @@ const Subtitle = styled.p`
   }
 
   @media (max-width: 480px) {
-    font-size: .5rem;
+    font-size: .6rem;
   }
 `;
 

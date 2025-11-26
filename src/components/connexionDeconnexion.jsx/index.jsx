@@ -5,6 +5,7 @@ import { useAuth } from "../../utils/hooks";
 import avatar_user_connected from "../../assets/avatar_user_connected.jpg";
 import { colors } from "../../utils/styles/colors";
 import DropdownUser from "../DropdownUser";
+import { LogIn } from "lucide-react";
 
 const ConnexionButton = styled.button`
   padding: 0.5rem 1.25rem;
@@ -125,8 +126,8 @@ function ConnexionDeconnexion() {
             <UserAvatar src={avatar_user_connected} alt="Avatar utilisateur" />
           </UserAvatarContainer>
         ) : (
-          <ConnexionButton onClick={handleConnexionPage}>
-            Se connecter
+          <ConnexionButton title="Se connecter" onClick={handleConnexionPage}>
+            <LogIn size={20} />
           </ConnexionButton>
         )}
       </DesktopNav>
@@ -138,8 +139,8 @@ function ConnexionDeconnexion() {
             <UserAvatar src={avatar_user_connected} alt="Avatar utilisateur" />
           </UserAvatarContainer>
         ) : (
-          <ConnexionButton onClick={handleConnexionPage}>
-            Se connecter
+          <ConnexionButton title="Se connecter" onClick={handleConnexionPage}>
+            <LogIn size={20} />
           </ConnexionButton>
         )}
 
