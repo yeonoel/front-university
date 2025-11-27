@@ -219,7 +219,7 @@ function Rechercher() {
     }
   };
 
-  const handleSearch = () => {
+  const handleSearch = (e) => {
     if (!searchTerm.trim()) return;
 
     navigate(`/Accueil/search?query=${encodeURIComponent(searchTerm)}`);
@@ -277,7 +277,7 @@ function Rechercher() {
           />
 
           <MobileSearchButton
-            onClick={handleSearch}
+            onClick={(e) => handleSearch(e)}
             disabled={!searchTerm.trim()}
           >
             <Search size={20} />

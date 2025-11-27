@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import videoInscription from '../assets/videos/videoInscription.mp4';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth, useMutation } from '../utils/hooks';
+import { useMutation } from '../utils/hooks';
 import API_URL from '../config';
 
 export default function Inscription() {
@@ -14,7 +14,6 @@ export default function Inscription() {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const { mutate } = useMutation();
-    const { login } = useAuth();
 
     const navigate = useNavigate();
 
@@ -37,8 +36,7 @@ export default function Inscription() {
             if (data.status === "success") {
                 setMessage('Inscription réussie ! 🎉');
                 setFormData({ username: '', email: '', password: '' });
-                login(data.token, data.user);
-                setError(data.message || 'Erreur lors de l\'inscription');
+                setError(data.message || 'inscription reussie !');
                 navigate('/Connexion');
             } else {
                 setError(data.message || 'Erreur lors de l\'inscription');

@@ -55,7 +55,7 @@ const StylesdCard = styled.div`
   /* Pour les téléphones */
   @media (max-width: 600px) {
     grid-template-columns: 1fr; /* une seule colonne */
-    ga
+  }
 `
 
 const RechercherContainer = styled.div`

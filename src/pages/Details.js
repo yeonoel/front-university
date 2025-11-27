@@ -229,6 +229,11 @@ const BodyDetail = styled.div`
   width: 70%;
   max-width: 1000px;
   margin: auto;
+  
+  @media (max-width: 480px) {
+    width: 100%;
+  }
+
 `;
 
 // 📊 Notes
@@ -238,6 +243,12 @@ const NoteContainer = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+`;
+
+const ConntainerToggle = styled.div`
+  @media (max-width: 968px) {
+    display: none;
+  }
 `;
 
 const CommentContainer = styled.div`
@@ -574,7 +585,9 @@ function Details() {
                 <Synthese logo={wallet} note={fraisScolaire.outOfFive} label="Frais scolaire" />
               </NoteContainer>
 
-              <ToggleComment />
+              <ConntainerToggle>
+                <ToggleComment />
+              </ConntainerToggle>
 
               <CommentContainer>
                 <div>
