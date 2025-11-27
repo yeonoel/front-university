@@ -236,10 +236,10 @@ function Modal({ isOpen, onClose, schoolId }) {
       {message && (
         <p
           className="
-            fixed top-2 left-1/2 -translate-x-1/2 
+            fixed top-100 left-1/2 -translate-x-1/2 
             w-[80%] md:w-[40%]
             h-16 flex items-center justify-center
-            text-center text-white bg-black
+            text-center text-white bg-black/70
             p-2 rounded-md text-sm font-medium shadow
           "
         >

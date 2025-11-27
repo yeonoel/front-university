@@ -245,18 +245,14 @@ const NoteContainer = styled.div`
   gap: 20px;
 `;
 
-const ConntainerToggle = styled.div`
-  @media (max-width: 968px) {
-    display: none;
-  }
-`;
+
 
 const CommentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  margin: auto;
+  margin: 30px auto;
 `;
 
 
@@ -451,12 +447,14 @@ function Details() {
 
   // 🎠 Slider mobile state
 
-  const nextImage = () => {
+  const nextImage = (e) => {
+    e.stopPropagation();
     if (images.length < 0) return;
     setCurrentIndex((prev) => (prev + 1) % images.length);
   }
 
-  const prevImage = () => {
+  const prevImage = (e) => {
+    e.stopPropagation();
     if (images.length < 0) return;
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   }
@@ -556,9 +554,9 @@ function Details() {
 
         {/* 📱 Version Mobile */}
         <MobileSlider>
-          <SliderArrow onClick={prevImage}>←</SliderArrow>
+          <SliderArrow onClick={(e) => prevImage(e)}>←</SliderArrow>
           <SliderImage src={images[currentIndex]} alt="photo école" />
-          <SliderArrow onClick={nextImage}>→</SliderArrow>
+          <SliderArrow onClick={(e) => nextImage(e)}>→</SliderArrow>
         </MobileSlider>
 
         {
@@ -585,9 +583,9 @@ function Details() {
                 <Synthese logo={wallet} note={fraisScolaire.outOfFive} label="Frais scolaire" />
               </NoteContainer>
 
-              <ConntainerToggle>
+              <div>
                 <ToggleComment />
-              </ConntainerToggle>
+              </div>
 
               <CommentContainer>
                 <div>
