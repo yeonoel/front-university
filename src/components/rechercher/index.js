@@ -268,7 +268,7 @@ function Rechercher() {
 
           <MobileSearchInput
             type="text"
-            placeholder="Nom de l'école, ville, filière..."
+            placeholder="Nom de l'école, commune, filière..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
