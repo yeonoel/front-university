@@ -9,12 +9,11 @@ const FooterContainer = styled.footer`
   background: ${({ isDarkMode }) => isDarkMode ? colors.backgroundDark : colors.backgroundLitlleLight};
   color: ${({ isDarkMode }) => isDarkMode ? colors.textPrimary : colors.textSecondary};
   padding: 60px 20px 30px;
-  margin-top: 80px;
-  box-shadow: 8px 2px 0px rgba(0, 0, 0, 0.1);
+  margin-top: auto; /* ← IMPORTANT : changé de 80px à auto */
   box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
-  margin-bottom: 0;
-    
+  margin-bottom: 0px;
+  width: 100%;
 `;
 
 const FooterContent = styled.div`
