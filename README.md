@@ -142,59 +142,68 @@ Les fichiers optimisés seront dans le dossier `build/`
 ## 🗂️ Structure du Projet
 
 ```
-techcampus-frontend/
+frontend/
 ├── public/
 │   ├── index.html
 │   └── assets/              # Images, icônes statiques
 │
-├── src/
-│   ├── components/          # Composants réutilisables
-│   │   ├── common/          # Button, Input, Card, etc.
-│   │   ├── layout/          # Header, Footer, Sidebar
-│   │   ├── schools/         # SchoolCard, SchoolList, etc.
-│   │   └── auth/            # LoginForm, RegisterForm
-│   │
-│   ├── pages/               # Pages principales
-│   │   ├── Home.tsx
-│   │   ├── SearchResults.tsx
-│   │   ├── SchoolDetail.tsx
-│   │   ├── Dashboard.tsx
-│   │   ├── Login.tsx
-│   │   └── Register.tsx
-│   │
-│   ├── services/            # API calls
-│   │   ├── api.ts           # Configuration Axios
-│   │   ├── authService.ts
-│   │   └── schoolService.ts
-│   │
-│   ├── context/             # Context API
-│   │   ├── AuthContext.tsx
-│   │   └── FavoritesContext.tsx
-│   │
-│   ├── hooks/               # Custom hooks
-│   │   ├── useAuth.ts
-│   │   ├── useSchools.ts
-│   │   └── useGeolocation.ts
-│   │
-│   ├── styles/              # Styled Components themes
-│   │   ├── GlobalStyles.ts
-│   │   ├── theme.ts
-│   │   └── variables.ts
-│   │
-│   ├── utils/               # Fonctions utilitaires
-│   │   ├── formatters.ts
-│   │   └── validators.ts
-│   │
-│   ├── types/               # TypeScript types
-│   │   └── index.ts
-│   │
-│   ├── App.tsx              # Composant racine
-│   └── index.tsx            # Point d'entrée
+|    ├── src/
+|    ├── assets/                     # Images, icons, static files
+|    │
+|    ├── components/                 # Reusable UI components
+|   │   ├── AnimatedCard/
+|    │   ├── Button/
+|    │   ├── cards/
+|    │   ├── comments/
+|    │   ├── connexionDeconnexion.jsx
+|    │   ├── DropdownUser/
+|    │   ├── Footer/
+|    │   ├── Header/
+|    │   ├── ModalAvis/
+|    │   ├── ModalConnexion/
+|    │   ├── nav/
+|    │   ├── orbitalRecherche/
+|    │   ├── rechercher/
+|    │   ├── synthese/
+|    │   ├── toggleComment/
+|    │   └── Universites/
+|    │
+|    ├── layout/                     # Layouts & route guards
+|    │   ├── mainLayout.jsx
+|    │   └── publicRoute.jsx
+|    │
+|    ├── pages/                      # Application pages (views)
+|    │   ├── Accueil.js
+|    │   ├── AjouterAvis.js
+|    │   ├── Avis.js
+|    │   ├── connexion.jsx
+|    │   ├── Details.js
+|    │   ├── inscription.jsx
+|    │   └── LandingPage.jsx
+|    │
+|    ├── utils/                      # Helpers & shared logic
+|    │   ├── api/                    # API calls (axios, fetch…)
+|    │   ├── context/                # React Context (auth, global state)
+|    │   ├── criteria/
+|    │   ├── datas/                  # Static data / mock data
+|    │   ├── hooks/                  # Custom React hooks
+|    │   ├── rating/
+|    │   └── styles/                 # Shared styles / theme
+|    │
+
 │
+                       # Environment variables
+├── .env.development
+├── .env.production
+└── .gitignore
 ├── screenshots/             # Images pour README
-├── .env.example
+├── package-lock.json
+├── postcss.config.js
 ├── package.json
+├── tailwind.config.js
 └── README.md
+
+
 ```
 
 ---
