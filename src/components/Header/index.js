@@ -116,7 +116,7 @@ function Header() {
 
           {/* Le logo reste toujours visible */}
           <StyledSpan isDarkMode={theme === "dark"} onClick={handleHomePage}>
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-gray-500 rounded-lg flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <span>TechCampus</span>

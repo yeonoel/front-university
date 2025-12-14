@@ -15,7 +15,7 @@ const ConnexionButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
-  background: ${colors.primaryGradient};
+  background: ${colors.gray400};
   color: ${colors.white};
 
   &:hover {

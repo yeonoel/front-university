@@ -137,7 +137,7 @@ const StyledInput = styled.input`
 
 const SearchButton = styled.button`
   padding: 0.5rem 2rem;
-  background: ${colors.primaryGradient};
+  background: ${colors.black};
   color: ${colors.white};
   border: none;
   border-radius: 10px;
@@ -149,7 +149,9 @@ const SearchButton = styled.button`
   white-space: nowrap;
 
   &:hover {
-    background: ${colors.primaryPinkDark};
+    background: ${colors.gray400};
+      color: ${colors.black};
+
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
   }
 
@@ -167,7 +169,7 @@ const SearchButton = styled.button`
 
 const StartButton = styled.button`
   padding: 0.8rem 4rem;
-  background: ${colors.primaryGradient};
+  background: ${colors.black};
   color: ${colors.white};
   border: none;
   border-radius: 10px;
@@ -180,7 +182,8 @@ const StartButton = styled.button`
   display: flex;
 
   &:hover {
-    background: ${colors.primaryPinkDark};
+    background: ${colors.gray400};
+    color: ${colors.white};
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
   }
 
