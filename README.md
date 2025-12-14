@@ -13,7 +13,7 @@
 ## 📸 Aperçu de l'Application
 
 ### Page d'Accueil
-![Homepage](./screenshots/homepage.png)
+![Homepage](./screenshots/homePage.png)
 *Interface d'accueil avec recherche*
 
 ### Recherche et Filtres
